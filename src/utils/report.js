@@ -27,35 +27,40 @@ export function calculateScoreRate(score, total) {
 ========================= */
 
 export function analyzeResults(questions, answers) {
-  const result = {};
+  const conceptMap = {};
 
   questions.forEach((q, i) => {
     const concept = q.concept || "기타";
 
-    if (!result[concept]) {
-      result[concept] = { total: 0, correct: 0 };
+    if (!conceptMap[concept]) {
+      conceptMap[concept] = { total: 0, correct: 0 };
     }
 
-    result[concept].total += 1;
+    conceptMap[concept].total += 1;
 
     if (answers[i] === q.answer) {
-      result[concept].correct += 1;
+      conceptMap[concept].correct += 1;
     }
   });
 
-  return result;
+  return Object.entries(conceptMap).map(([concept, value]) => ({
+    concept,
+    total: value.total,
+    correct: value.correct,
+    rate: Math.round((value.correct / value.total) * 100),
+  }));
 }
 
 export function getStrongConcepts(analysis) {
-  return Object.entries(analysis)
-    .filter(([_, v]) => v.correct === v.total)
-    .map(([k]) => k);
+  return analysis
+    .filter((item) => item.correct === item.total)
+    .map((item) => item.concept);
 }
 
 export function getWeakConcepts(analysis) {
-  return Object.entries(analysis)
-    .filter(([_, v]) => v.correct < v.total)
-    .map(([k]) => k);
+  return analysis
+    .filter((item) => item.correct < item.total)
+    .map((item) => item.concept);
 }
 
 /* =========================
