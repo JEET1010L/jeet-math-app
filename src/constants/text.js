@@ -1,11 +1,11 @@
 export const TEXT = {
   MAIN_TITLE: "개념 진단 테스트",
-  MAIN_SUBTITLE: "틀린 이유를 보면 실력이 보입니다",
+  MAIN_SUBTITLE: "틀린 개념을 보면 실력이 보입니다",
 
-  BRAND_NAME: "JEET",
+  BRAND_NAME: "삼척JEET",
   BRAND_SUBJECT: "수학",
 
-  NAME_PLACEHOLDER: "학생 이름 (상담 기록용)",
+  NAME_PLACEHOLDER: "학생이름 (개인별피드백용)",
 
   START_BADGE: "진단",
   START_BUTTON: "진단 시작하기",
@@ -29,7 +29,7 @@ export const TEXT = {
 
   EMPTY_DATA: "문제 데이터가 없습니다.",
 
-  ADMIN_TITLE: "JEET 진단 관리 시스템",
+  ADMIN_TITLE: "삼척JEET수학 진단관리시스템",
   ADMIN_SUBTITLE: "학생 개념 진단 결과를 기반으로 상담이 가능합니다",
   ADMIN_CLEAR_ALL: "전체 기록 삭제",
 
@@ -49,5 +49,5 @@ export const TEXT = {
   NO_WEAK_DATA: "특별히 낮은 개념 없이 고르게 수행했습니다.",
 
   WEAK_GUIDE: "개념 이해 → 유형 적용 → 반복 학습 순으로 보완하는 것이 효과적입니다.",
-  REPORT_FOOTER: "본 리포트는 JEET 수학전문학원 진단 시스템을 바탕으로 자동 생성되었습니다.",
+  REPORT_FOOTER: "본 리포트는 삼척JEET수학전문학원 진단 시스템을 바탕으로 자동 생성되었습니다.",
 };
