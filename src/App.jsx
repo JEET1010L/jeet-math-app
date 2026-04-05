@@ -42,7 +42,13 @@ const gradeDescriptions = {
   m3: "이차방정식 · 이차함수",
   h1: "다항식 · 방정식 · 이차함수",
   h2: "지수로그 · 수열 · 미분 기초",
-  h3: "미적분 · 함수 해석 · 수능형 사고",
+  h3: "확률과통계 · 함수 해석 · 수능형 사고",
+  s1: "삼일중1 시험대비",
+  s2: "삼척청아중2 시험대비",
+  s3: "청아삼일중3 시험대비",
+  s4: "삼척여고1 시험대비",
+  s5: "삼척삼일고2 시험대비",
+  s6: "삼척삼여고3 시험대비",
 };
 
 function getLevelComment(level) {
@@ -178,6 +184,10 @@ export default function App() {
             </div>
 
             <div style={styles.inputCard}>
+              <div style={{ textAlign: "center", marginBottom: 10 }}>
+                 현재 문제 세트 수: {Object.keys(dataMap).length}
+              </div>
+              
               <input
                 type="text"
                 value={studentName}
@@ -228,7 +238,7 @@ export default function App() {
           <div style={styles.heroCard}>
             <div style={styles.curveTop} />
             <div style={styles.logoWrap}>
-              <div style={styles.logoText}>JEET</div>
+              <div style={styles.logoText}>삼척JEET</div>
               <div style={styles.logoTag}>수학</div>
             </div>
 

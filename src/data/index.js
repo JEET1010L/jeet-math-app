@@ -10,6 +10,7 @@ import { m3Questions } from "./m3";
 import { h1Questions } from "./h1";
 import { h2Questions } from "./h2";
 import { h3Questions } from "./h3";
+import { s1Questions } from "./s1";
 
 export const dataMap = {
   g1: g1Questions,
@@ -24,6 +25,7 @@ export const dataMap = {
   h1: h1Questions,
   h2: h2Questions,
   h3: h3Questions,
+  s1: s1Questions,
 };
 
 export const gradeLabels = {
@@ -39,4 +41,5 @@ export const gradeLabels = {
   h1: "고1",
   h2: "고2",
   h3: "고3",
+  s1: "🔥삼일중1 시험대비 적중50선🔥",
 };

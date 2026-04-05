@@ -1,0 +1,61 @@
+export const s1Questions = [
+  // [1-10: 소인수분해 기초 및 제곱수 만들기]
+  { id: 1, concept: "소인수분해", subConcept: "소수와 합성수", difficulty: 2, prompt: "다음 중 소수의 개수와 합성수의 개수의 차는? [ 1, 2, 13, 21, 37, 51 ]", choices: ["1개", "2개", "3개", "4개"], answer: 0, explanation: "소수(2, 13, 37) 3개, 합성수(21, 51) 2개입니다. 1은 제외하므로 차이는 1입니다.", skill: "개념 이해", required: true },
+  { id: 2, concept: "소인수분해", subConcept: "거듭제곱", difficulty: 1, prompt: "2 × 2 × 2 × 5 × 5를 거듭제곱으로 옳게 나타낸 것은?", choices: ["2³ × 5²", "2² × 5³", "2 × 3 × 5 × 2", "2³ + 5²"], answer: 0, explanation: "2가 3번, 5가 2번 곱해졌으므로 2³ × 5²입니다.", skill: "표현력", required: true },
+  { id: 3, concept: "소인수분해", subConcept: "소인수분해", difficulty: 2, prompt: "540을 소인수분해했을 때 소인수를 모두 고르면?", choices: ["2, 3", "2, 5", "2, 3, 5", "3, 5"], answer: 2, explanation: "540 = 2² × 3³ × 5 이므로 소인수는 2, 3, 5입니다.", skill: "연산", required: true },
+  { id: 4, concept: "소인수분해", subConcept: "약수의 개수", difficulty: 3, prompt: "3³ × 5ᵃ의 약수의 개수가 12개일 때, 자연수 a의 값은?", choices: ["2", "3", "4", "5"], answer: 0, explanation: "(3+1) × (a+1) = 12에서 4 × (a+1) = 12이므로 a+1=3, 즉 a=2입니다.", skill: "역산 능력", required: true },
+  { id: 5, concept: "소인수분해", subConcept: "제곱수 만들기", difficulty: 4, prompt: "72에 자연수 x를 곱하여 어떤 자연수의 제곱이 되게 할 때, 가장 작은 x는?", choices: ["2", "3", "6", "8"], answer: 0, explanation: "72 = 2³ × 3² 이므로 모든 지수를 짝수로 만들려면 2가 하나 더 필요합니다.", skill: "추론", required: true },
+  { id: 6, concept: "소인수분해", subConcept: "약수 구하기", difficulty: 2, prompt: "다음 중 2² × 3³의 약수가 아닌 것은?", choices: ["2 × 3", "2² × 3", "2³ × 3", "2² × 3²"], answer: 2, explanation: "소인수 2의 지수가 2를 넘을 수 없습니다. 2³은 약수가 아닙니다.", skill: "개념 판단", required: true },
+  { id: 7, concept: "소인수분해", subConcept: "소인수분해 활용", difficulty: 3, prompt: "1부터 20까지의 자연수 중 소수의 합은?", choices: ["75", "77", "80", "83"], answer: 1, explanation: "2+3+5+7+11+13+17+19 = 77입니다.", skill: "연산", required: true },
+  { id: 8, concept: "소인수분해", subConcept: "합성수 찾기", difficulty: 2, prompt: "다음 중 약수가 3개인 수는?", choices: ["9", "12", "15", "27"], answer: 0, explanation: "약수가 3개인 수는 (소수)² 형태입니다. 3²=9입니다.", skill: "성질 파악", required: true },
+  { id: 9, concept: "소인수분해", subConcept: "제곱수 만들기", difficulty: 4, prompt: "120/n 이 어떤 자연수의 제곱이 되도록 하는 가장 작은 자연수 n은?", choices: ["15", "30", "60", "120"], answer: 1, explanation: "120 = 2³ × 3 × 5 이므로 홀수 지수인 2, 3, 5를 제거해야 합니다. 2×3×5=30.", skill: "심화 추론", required: true },
+  { id: 10, concept: "소인수분해", subConcept: "약수의 개수", difficulty: 4, prompt: "약수의 개수가 6개인 가장 작은 자연수는?", choices: ["12", "16", "20", "32"], answer: 0, explanation: "2² × 3¹ = 12(개수 6개)가 가장 작습니다.", skill: "최적화 문제", required: true },
+
+  // [11-20: 최대공약수와 최소공배수]
+  { id: 11, concept: "소인수분해", subConcept: "최대공약수", difficulty: 2, prompt: "36, 60, 96의 최대공약수는?", choices: ["6", "12", "18", "24"], answer: 1, explanation: "세 수의 공통된 가장 큰 약수는 12입니다.", skill: "연산", required: true },
+  { id: 12, concept: "소인수분해", subConcept: "최소공배수", difficulty: 2, prompt: "12, 15, 20의 최소공배수는?", choices: ["30", "60", "120", "180"], answer: 1, explanation: "세 수의 최소공배수는 60입니다.", skill: "연산", required: true },
+  { id: 13, concept: "소인수분해", subConcept: "서로소", difficulty: 1, prompt: "다음 중 두 수가 서로소인 것은?", choices: ["9와 12", "15와 25", "14와 15", "21과 35"], answer: 2, explanation: "14와 15는 공약수가 1뿐입니다.", skill: "개념", required: true },
+  { id: 14, concept: "소인수분해", subConcept: "최대공약수 활용", difficulty: 4, prompt: "가로 120cm, 세로 84cm인 벽면을 가득 채우는 가장 큰 정사각형 타일의 한 변은?", choices: ["6cm", "12cm", "14cm", "24cm"], answer: 1, explanation: "120과 84의 최대공약수인 12입니다.", skill: "실생활 응용", required: true },
+  { id: 15, concept: "소인수분해", subConcept: "최소공배수 활용", difficulty: 4, prompt: "A버스는 15분, B버스는 20분 간격 출발 시, 8시 정각 이후 처음 동시 출발 시각은?", choices: ["8시 30분", "8시 40분", "9시", "10시"], answer: 2, explanation: "최소공배수 60분이므로 1시간 후인 9시입니다.", skill: "실생활 응용", required: true },
+  { id: 16, concept: "소인수분해", subConcept: "나머지 문제", difficulty: 4, prompt: "어떤 수로 40을 나누면 4 남고, 56을 나누면 2 남는다. 가장 큰 수는?", choices: ["6", "12", "18", "36"], answer: 2, explanation: "36과 54의 최대공약수 18입니다.", skill: "역산 추론", required: true },
+  { id: 17, concept: "소인수분해", subConcept: "공배수 성질", difficulty: 3, prompt: "최소공배수가 24인 두 수의 공배수 중 100에 가장 가까운 수는?", choices: ["72", "96", "104", "120"], answer: 1, explanation: "24의 배수 중 100에 가장 가까운 것은 96입니다.", skill: "수 감각", required: true },
+  { id: 18, concept: "소인수분해", subConcept: "세 수의 최소공배수", difficulty: 3, prompt: "4, 10, x의 최소공배수가 100일 때, 가장 작은 자연수 x는?", choices: ["5", "20", "25", "50"], answer: 2, explanation: "100 = 2² × 5² 이므로 x는 반드시 5²인 25를 포함해야 합니다.", skill: "논리 추론", required: true },
+  { id: 19, concept: "소인수분해", subConcept: "최대공약수 활용", difficulty: 4, prompt: "연필 36자루와 지우개 48개를 최대한 많은 학생에게 똑같이 줄 때 학생 수는?", choices: ["6명", "12명", "18명", "24명"], answer: 1, explanation: "36과 48의 최대공약수 12입니다.", skill: "실생활 응용", required: true },
+  { id: 20, concept: "소인수분해", subConcept: "톱니바퀴 문제", difficulty: 5, prompt: "톱니 24개 A와 30개 B가 맞물려 돌 때, 다시 제자리일 때 B의 회전수는?", choices: ["4번", "5번", "10번", "120번"], answer: 0, explanation: "최소공배수 120 / B톱니 30 = 4바퀴입니다.", skill: "복합 사고", required: true },
+
+  // [21-30: 정수와 유리수 - 연산 기초]
+  { id: 21, concept: "정수와 유리수", subConcept: "양수와 음수", difficulty: 1, prompt: "다음 중 밑줄 친 부분을 부호로 옳게 나타낸 것은?", choices: ["300원 손해: +300원", "해발 200m: +200m", "5점 감점: +5점", "영하 10도: +10도"], answer: 1, explanation: "해발은 +로 표시합니다.", skill: "개념", required: true },
+  { id: 22, concept: "정수와 유리수", subConcept: "유리수 분류", difficulty: 2, prompt: "다음 중 정수가 아닌 유리수는?", choices: ["-3", "0", "4/2", "-1.5"], answer: 3, explanation: "-1.5는 정수가 아닙니다.", skill: "수 분류", required: true },
+  { id: 23, concept: "정수와 유리수", subConcept: "절댓값", difficulty: 2, prompt: "절댓값이 같고 부호 반대인 두 수 사이 거리가 10일 때 작은 수는?", choices: ["5", "10", "-5", "-10"], answer: 2, explanation: "0에서 거리가 5인 ±5 중 작은 수는 -5입니다.", skill: "수직선 이해", required: true },
+  { id: 24, concept: "정수와 유리수", subConcept: "대소 비교", difficulty: 2, prompt: "다음 중 가장 큰 수는?", choices: ["-5", "-| -3 |", "0", "| -2 |"], answer: 3, explanation: "|-2|=2가 가장 큽니다.", skill: "수 비교", required: true },
+  { id: 25, concept: "정수와 유리수", subConcept: "유리수 덧셈", difficulty: 2, prompt: "(-7) + (+3)의 결과는?", choices: ["10", "-10", "4", "-4"], answer: 3, explanation: "-7 + 3 = -4입니다.", skill: "연산", required: true },
+  { id: 26, concept: "정수와 유리수", subConcept: "유리수 뺄셈", difficulty: 2, prompt: "(-5) - (-8)의 결과는?", choices: ["-13", "13", "-3", "3"], answer: 3, explanation: "-5 + 8 = 3입니다.", skill: "연산", required: true },
+  { id: 27, concept: "정수와 유리수", subConcept: "곱셈 부호", difficulty: 3, prompt: "(-1) × (-2) × (-3) × (-4)의 계산 결과는?", choices: ["-24", "24", "-10", "10"], answer: 1, explanation: "음수가 짝수개이므로 +24입니다.", skill: "연산 규칙", required: true },
+  { id: 28, concept: "정수와 유리수", subConcept: "나눗셈과 역수", difficulty: 2, prompt: "(-3/4)의 역수와 0.5의 역수의 곱은?", choices: ["-3/2", "-8/3", "-3/8", "-2/3"], answer: 1, explanation: "-4/3 × 2 = -8/3입니다.", skill: "개념 응용", required: true },
+  { id: 29, concept: "정수와 유리수", subConcept: "혼합 계산", difficulty: 4, prompt: "8 - (-2)² × 3의 값은?", choices: ["30", "-4", "20", "4"], answer: 1, explanation: "8 - (4 × 3) = -4입니다.", skill: "연산 순서", required: true },
+  { id: 30, concept: "정수와 유리수", subConcept: "분배 법칙", difficulty: 3, prompt: "12 × (1/3 - 1/4)를 계산하면?", choices: ["1", "7", "-1", "12"], answer: 0, explanation: "4 - 3 = 1입니다.", skill: "연산 전략", required: true },
+
+  // [31-40: 정수와 유리수 심화]
+  { id: 31, concept: "정수와 유리수", subConcept: "수직선과 정수", difficulty: 3, prompt: "-2.3과 3.1 사이에 있는 정수의 개수는?", choices: ["4개", "5개", "6개", "7개"], answer: 2, explanation: "-2, -1, 0, 1, 2, 3으로 6개입니다.", skill: "수 인지", required: true },
+  { id: 32, concept: "정수와 유리수", subConcept: "절댓값 성질", difficulty: 3, prompt: "|a| = -a 를 만족하는 a의 범위는?", choices: ["a > 0", "a < 0", "a ≥ 0", "a ≤ 0"], answer: 3, explanation: "a가 음수이거나 0일 때 성립합니다.", skill: "논리 판단", required: true },
+  { id: 33, concept: "정수와 유리수", subConcept: "유리수 뺄셈", difficulty: 4, prompt: "어떤 수에서 -5를 빼야 할 것을 더했더니 2가 되었다. 바른 계산은?", choices: ["7", "12", "-3", "-8"], answer: 1, explanation: "x-5=2이므로 x=7. 바른 계산은 7-(-5)=12입니다.", skill: "문제 해결", required: true },
+  { id: 34, concept: "정수와 유리수", subConcept: "곱셈 활용", difficulty: 3, prompt: "a×b=6, a×c=-10일 때, a×(b-c)의 값은?", choices: ["-4", "4", "16", "-16"], answer: 2, explanation: "ab - ac = 6 - (-10) = 16입니다.", skill: "연산 법칙", required: true },
+  { id: 35, concept: "정수와 유리수", subConcept: "부호 추론", difficulty: 4, prompt: "a×b < 0, a > b일 때, 다음 중 항상 양수인 것은?", choices: ["a", "b", "b - a", "a/b"], answer: 0, explanation: "곱이 음수고 a가 크면 a는 (+), b는 (-)입니다.", skill: "논리 판단", required: true },
+  { id: 36, concept: "정수와 유리수", subConcept: "거듭제곱 비교", difficulty: 4, prompt: "n이 홀수일 때, (-1)ⁿ⁺¹의 값은?", choices: ["-1", "1", "0", "없음"], answer: 1, explanation: "홀수+1은 짝수이므로 1입니다.", skill: "추론", required: true },
+  { id: 37, concept: "정수와 유리수", subConcept: "유리수 대소", difficulty: 3, prompt: "a = -3/2, b = -1.2, c = -2 일 때 작은 수부터 나열하면?", choices: ["a, b, c", "c, a, b", "b, a, c", "c, b, a"], answer: 1, explanation: "-2 < -1.5 < -1.2 순서입니다.", skill: "수 비교", required: true },
+  { id: 38, concept: "정수와 유리수", subConcept: "평균 계산", difficulty: 4, prompt: "평균 80점인 세 시험에서 75점, 82점 받았다면 마지막 점수 x는?", choices: ["83점", "85점", "80점", "78점"], answer: 0, explanation: "총점 240점이 되어야 하므로 x=83입니다.", skill: "통계 기초", required: true },
+  { id: 39, concept: "정수와 유리수", subConcept: "나눗셈 활용", difficulty: 4, prompt: "(-3) ÷ 2/3 × (-4/9)를 계산하면?", choices: ["2", "-2", "1", "4"], answer: 0, explanation: "-3 × 3/2 × -4/9 = 2입니다.", skill: "연산", required: true },
+  { id: 40, concept: "정수와 유리수", subConcept: "종합 응용", difficulty: 5, prompt: "|a|=4, |b|=7이고 a+b < 0일 때, a-b의 값 중 가장 큰 것은?", choices: ["3", "11", "-3", "-11"], answer: 1, explanation: "a=4, b=-7일 때 4-(-7)=11로 가장 큽니다.", skill: "심화 추론", required: true },
+
+  // [41-50: 삼일중 킬러 및 실생활 응용]
+  { id: 41, concept: "소인수분해", subConcept: "약수의 개수 응용", difficulty: 5, prompt: "2⁴ × 3 × x 의 약수의 개수가 20개일 때, 가장 작은 자연수 x는?", choices: ["2", "3", "5", "7"], answer: 2, explanation: "x=5일 때, 2⁴ × 3¹ × 5¹ 이 되어 (5×2×2)=20이 성립합니다.", skill: "심화 역산", required: true },
+  { id: 42, concept: "소인수분해", subConcept: "최대공약수 활용", difficulty: 4, prompt: "어떤 수로 100 나누면 4 남고, 150 나누면 6 남는다. 가장 큰 수는?", choices: ["8", "12", "16", "24"], answer: 3, explanation: "96과 144의 최대공약수 24입니다.", skill: "응용 연산", required: true },
+  { id: 43, concept: "소인수분해", subConcept: "공배수 활용", difficulty: 5, prompt: "3, 4, 5 어느 것으로 나누어도 1이 남는 세 자리 자연수 중 가장 작은 것은?", choices: ["120", "121", "181", "241"], answer: 1, explanation: "최소공배수 60의 배수 + 1 중 최소 세 자리는 121입니다.", skill: "추론", required: true },
+  { id: 44, concept: "정수와 유리수", subConcept: "수직선 추론", difficulty: 4, prompt: "수직선에서 -3으로부터 거리가 5인 두 점의 좌표의 합은?", choices: ["2", "-8", "-6", "0"], answer: 2, explanation: "2와 -8의 합은 -6입니다.", skill: "기하적 추론", required: true },
+  { id: 45, concept: "정수와 유리수", subConcept: "부호 결정", difficulty: 5, prompt: "a×b < 0, b×c > 0, a < c일 때, a, b, c의 부호는?", choices: ["+, -, -", "-, +, +", "-, -, +", "+, +, -"], answer: 0, explanation: "b, c가 같은 부호이고 a가 다를 때, a < c를 만족하려면 a는 (+), b와 c는 (-)여야 합니다.", skill: "논리 판단", required: true },
+  { id: 46, concept: "정수와 유리수", subConcept: "실생활", difficulty: 3, prompt: "현재 수온 12℃에서 매시간 1.5℃씩 내려간다면 4시간 후 수온은?", choices: ["6℃", "7.5℃", "9℃", "10.5℃"], answer: 0, explanation: "12 - 6 = 6입니다.", skill: "실생활", required: true },
+  { id: 47, concept: "정수와 유리수", subConcept: "역수 합", difficulty: 4, prompt: "-2/3의 역수 a와 0.75의 역수 b의 합 a+b는?", choices: ["-1/6", "1/6", "1/12", "-1/12"], answer: 0, explanation: "-3/2 + 4/3 = -1/6입니다.", skill: "연산", required: true },
+  { id: 48, concept: "소인수분해", subConcept: "약수 성질", difficulty: 5, prompt: "40의 모든 약수의 합은?", choices: ["80", "90", "70", "100"], answer: 1, explanation: "1+2+4+5+8+10+20+40 = 90입니다.", skill: "개념 융합", required: true },
+  { id: 49, concept: "정수와 유리수", subConcept: "대소 관계", difficulty: 3, prompt: "-3 < x ≤ 2를 만족하는 정수 x의 개수는?", choices: ["4개", "5개", "6개", "7개"], answer: 1, explanation: "-2, -1, 0, 1, 2로 5개입니다.", skill: "범위 이해", required: true },
+  { id: 50, concept: "정수와 유리수", subConcept: "혼합 계산 최종", difficulty: 5, prompt: "(-1)² - (-2)³ ÷ 4 + (-3) × | -2 | 의 값은?", choices: ["-3", "-4", "3", "4"], answer: 0, explanation: "1 - (-2) - 6 = -3입니다.", skill: "최종 점검", required: true }
+];
