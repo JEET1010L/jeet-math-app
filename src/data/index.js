@@ -11,6 +11,8 @@ import { h1Questions } from "./h1";
 import { h2Questions } from "./h2";
 import { h3Questions } from "./h3";
 import { s1Questions } from "./s1";
+import { s2Questions } from "./s2";
+import { s3Questions } from "./s3";
 
 export const dataMap = {
   g1: g1Questions,
@@ -26,6 +28,9 @@ export const dataMap = {
   h2: h2Questions,
   h3: h3Questions,
   s1: s1Questions,
+  s2: s2Questions,
+  s3: s3Questions,
+  
 };
 
 export const gradeLabels = {
@@ -41,5 +46,7 @@ export const gradeLabels = {
   h1: "고1",
   h2: "고2",
   h3: "고3",
-  s1: "🔥삼일중1 시험대비 적중50선🔥",
+  s1: "🔥삼일중1 시험대비🔥",
+  s2: "🔥청아,삼일중2 시험대비🔥",
+  s3: "🔥청아,삼척중3 시험대비🔥",
 };
