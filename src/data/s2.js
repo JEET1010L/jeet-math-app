@@ -1,7 +1,34 @@
 export const s2Questions = [
-  { id: 1, concept: "유리수와 순환소수", subConcept: "유리수의 뜻", difficulty: 1, prompt: "다음 중 유리수가 아닌 것은?", choices: ["0", "\\frac{1}{2}", "-3", "\\pi"], answer: 3, explanation: "\\pi는 무리수입니다.", skill: "개념", required: true },
-  { id: 2, concept: "유리수와 순환소수", subConcept: "유한소수 판별", difficulty: 2, prompt: "분수 \\frac{7}{20}을 소수로 나타내면 어떤 소수가 되는가?", choices: ["유한소수", "순환소수", "무한소수", "정수"], answer: 0, explanation: "20 = 2^2 \\times 5 이므로 유한소수입니다.", skill: "판단", required: true },
-  { id: 3, concept: "유리수와 순환소수", subConcept: "순환소수의 표현", difficulty: 2, prompt: "0.333\\dots을 순환마디를 이용하여 올바르게 나타낸 것은?", choices: ["0.3", "0.\\dot{3}", "0.33", "0.\\dot{3}\\dot{3}"], answer: 1, explanation: "반복되는 3 위에 점을 찍습니다.", skill: "표현", required: true },
+  export const s2Questions = [
+  { 
+    id: 1, 
+    concept: "유리수와 순환소수", 
+    subConcept: "유리수의 뜻", 
+    prompt: "다음 중 유리수가 아닌 것은?", 
+    // 앞에 공백을 한 칸씩 넣어서 번호와 강제로 떨어뜨렸습니다.
+    choices: [" 0 ", " \\frac{1}{2} ", " -3 ", " \\pi "], 
+    answer: 3, 
+    explanation: "\\pi는 무리수입니다."
+  },
+  { 
+    id: 2, 
+    concept: "유리수와 순환소수", 
+    subConcept: "유한소수 판별", 
+    prompt: "분수 \\frac{7}{20}을 소수로 나타내면?", 
+    choices: [" 유한소수 ", " 순환소수 ", " 무한소수 ", " 정수 "], 
+    answer: 0, 
+    explanation: "분모의 소인수가 2와 5뿐입니다."
+  },
+  { 
+    id: 3, 
+    concept: "유리수와 순환소수", 
+    subConcept: "순환소수의 표현", 
+    prompt: "0.333...을 순환마디로 나타내면?", 
+    choices: [" 0.3 ", " 0.\\dot{3} ", " 0.33 ", " 0.\\dot{3}\\dot{3} "], 
+    answer: 1, 
+    explanation: "반복되는 마디 위에 점을 찍습니다."
+  }
+  // ... (일단 3번까지만 먼저 적용해서 확인해 보세요!)
   { id: 4, concept: "단항식의 계산", subConcept: "지수법칙", difficulty: 2, prompt: "a^3 \\times a^4을 간단히 하면?", choices: ["a^7", "a^{12}", "2a^7", "a^{34}"], answer: 0, explanation: "a^{3+4} = a^7입니다.", skill: "연산", required: true },
   { id: 5, concept: "단항식의 계산", subConcept: "지수법칙(거듭제곱)", difficulty: 2, prompt: "(x^2)^3을 간단히 하면?", choices: ["x^5", "x^6", "x^8", "3x^2"], answer: 1, explanation: "x^{2 \\times 3} = x^6입니다.", skill: "연산", required: true },
   { id: 6, concept: "부등식", subConcept: "일차부등식의 해", difficulty: 3, prompt: "2x - 4 > 0의 해를 구하면?", choices: ["x > 2", "x < 2", "x > -2", "x < -2"], answer: 0, explanation: "2x > 4 이므로 x > 2입니다.", skill: "해구하기", required: true },
