@@ -1,5 +1,4 @@
 export const s2Questions = [
-  export const s2Questions = [
   { 
     id: 1, 
     concept: "유리수와 순환소수", 
