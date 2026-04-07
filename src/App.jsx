@@ -13,29 +13,22 @@ import {
 } from "./utils/report";
 import { dataMap, gradeLabels } from "./data";
 
-// --- 수식 처리 컴포넌트 ---
+// --- 수식 렌더링용 핵심 컴포넌트 ---
 const MathText = ({ text }) => {
   useEffect(() => {
+    // 데이터가 바뀔 때마다 MathJax에게 다시 그리라고 명령
     if (window.MathJax && window.MathJax.typesetPromise) {
       window.MathJax.typesetPromise();
     }
   }, [text]);
+
   return <span className="math-text">{text || ""}</span>;
 };
 
 const COLORS = {
   primary: "#E11D48",
-  primarySoft: "#FB7185",
   navy: "#0F172A",
   slate: "#64748B",
-  bg: "#F8FAFC",
-  line: "#E2E8F0",
-  white: "#FFFFFF",
-  successBg: "#ECFDF5",
-  successText: "#047857",
-  errorBg: "#FFF1F2",
-  errorText: "#BE123C",
-  softCard: "linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)",
   primaryGrad: "linear-gradient(135deg, #E11D48 0%, #FB7185 100%)",
 };
 
@@ -47,13 +40,6 @@ const gradeDescriptions = {
   s1: "삼일중1 시험대비", s2: "삼척청아중2 시험대비", s3: "청아삼일중3 시험대비",
   s4: "삼척여고1 시험대비", s5: "삼척삼일고2 시험대비", s6: "삼척삼여고3 시험대비",
 };
-
-function getLevelComment(level) {
-  if (level === "최상") return "상위권 수준으로 심화 및 선행 학습 연결이 가능합니다.";
-  if (level === "상") return "핵심 개념은 안정적이며 응용 훈련을 통해 상위권으로 확장 가능합니다.";
-  if (level === "중") return "기본은 갖추었으나 취약 개념 보완이 필요합니다.";
-  return "기초 개념 재정리와 반복 훈련이 우선입니다.";
-}
 
 export default function App() {
   const [studentName, setStudentName] = useState("");
@@ -69,15 +55,10 @@ export default function App() {
 
   const score = useMemo(() => calculateScore(questions, answers), [questions, answers]);
   const scoreRate = useMemo(() => calculateScoreRate(score, questions.length || 1), [score, questions.length]);
-  const analysis = useMemo(() => analyzeResults(questions, answers), [questions, answers]);
-  const strongConcepts = useMemo(() => getStrongConcepts(analysis), [analysis]);
-  const weakConcepts = useMemo(() => getWeakConcepts(analysis), [analysis]);
-  const level = useMemo(() => classifyLevel(scoreRate), [scoreRate]);
 
   const resetToHome = () => { setGrade(null); setIndex(0); setAnswers([]); setFinished(false); setSelected(null); setShow(false); };
   const startTest = (g) => { setGrade(g); setIndex(0); setAnswers([]); setFinished(false); setSelected(null); setShow(false); };
-  const checkAnswer = () => { if (selected !== null) setShow(true); };
-
+  
   const nextQuestion = async () => {
     const newAnswers = [...answers, selected];
     if (index + 1 < questions.length) {
@@ -88,7 +69,6 @@ export default function App() {
     } else {
       setAnswers(newAnswers);
       setFinished(true);
-      // 백그라운드 저장 로직
       try {
         const finalRate = calculateScoreRate(calculateScore(questions, newAnswers), questions.length);
         const res = buildParentSummary({
@@ -113,9 +93,8 @@ export default function App() {
         <div style={styles.shell}>
           <div style={styles.heroCard}>
             <div style={styles.curveTop} />
-            <div style={styles.logoWrap}><div style={styles.logoText}>{TEXT.BRAND_NAME}</div><div style={styles.logoTag}>{TEXT.BRAND_SUBJECT}</div></div>
-            <div style={{ textAlign: "center", marginBottom: 24 }}><div style={styles.title}>{TEXT.MAIN_TITLE}</div></div>
-            <input type="text" value={studentName} onChange={(e) => setStudentName(e.target.value)} placeholder={TEXT.NAME_PLACEHOLDER} style={styles.nameInput} />
+            <div style={styles.logoWrap}><div style={styles.logoText}>삼척JEET</div><div style={styles.logoTag}>수학</div></div>
+            <input type="text" value={studentName} onChange={(e) => setStudentName(e.target.value)} placeholder="학생 이름을 입력하세요" style={styles.nameInput} />
             <div style={styles.gradeGrid}>
               {Object.keys(dataMap).map((key) => (
                 <button key={key} onClick={() => startTest(key)} style={styles.gradeButton}>
@@ -135,9 +114,8 @@ export default function App() {
       <div style={styles.page}>
         <div style={styles.shell}>
           <div style={styles.heroCard}>
-            <div style={styles.title}>결과 리포트</div>
-            <div style={styles.resultScore}>{scoreRate}%</div>
-            <button onClick={resetToHome} style={styles.primaryButton}>다시하기</button>
+            <div style={styles.title}>진단 결과: {scoreRate}%</div>
+            <button onClick={resetToHome} style={styles.primaryButton}>처음으로</button>
           </div>
         </div>
       </div>
@@ -153,7 +131,6 @@ export default function App() {
             <div style={styles.progressBadge}>{index + 1}/{questions.length}</div>
           </div>
           <div style={styles.questionCard}>
-            <div style={styles.questionConcept}>{q?.concept}</div>
             <div style={styles.questionText}><MathText text={q?.prompt} /></div>
           </div>
           <div style={styles.choiceList}>
@@ -165,7 +142,7 @@ export default function App() {
             ))}
           </div>
           {!show ? (
-            <button onClick={checkAnswer} style={styles.primaryButton} disabled={selected === null}>정답 확인</button>
+            <button onClick={() => selected !== null && setShow(true)} style={styles.primaryButton} disabled={selected === null}>정답 확인</button>
           ) : (
             <button onClick={nextQuestion} style={styles.primaryButton}>다음 문제</button>
           )}
@@ -175,34 +152,30 @@ export default function App() {
   );
 }
 
-function TagBlock({ label, items, tone }) { return null; } // 결과페이지 간소화용
-
 const styles = {
-  page: { minHeight: "100vh", background: "#F8FAFC", padding: "20px 12px", fontFamily: "sans-serif" },
-  shell: { maxWidth: 640, margin: "0 auto" },
-  heroCard: { borderRadius: 32, background: "#FFFFFF", padding: 20, border: "1px solid #E2E8F0", boxShadow: "0 10px 30px rgba(0,0,0,0.05)" },
-  curveTop: { height: 8, background: COLORS.primaryGrad, borderRadius: "32px 32px 0 0", margin: "-20px -20px 20px -20px" },
-  logoWrap: { display: "flex", justifyContent: "center", gap: 10, marginBottom: 20 },
-  logoText: { fontSize: 32, fontWeight: 900, color: COLORS.primary },
-  logoTag: { background: COLORS.primary, color: "#FFF", padding: "4px 12px", borderRadius: 10 },
-  title: { fontSize: 28, fontWeight: 900, textAlign: "center" },
-  nameInput: { width: "100%", height: 60, borderRadius: 15, border: "2px solid #E2E8F0", fontSize: 20, textAlign: "center", marginBottom: 20, boxSizing: "border-box" },
+  page: { minHeight: "100vh", background: "#F1F5F9", padding: "20px 12px", fontFamily: "sans-serif" },
+  shell: { maxWidth: 500, margin: "0 auto" },
+  heroCard: { borderRadius: 24, background: "#FFFFFF", padding: 20, border: "1px solid #E2E8F0", boxShadow: "0 10px 25px rgba(0,0,0,0.05)" },
+  curveTop: { height: 6, background: COLORS.primaryGrad, borderRadius: "24px 24px 0 0", margin: "-20px -20px 20px -20px" },
+  logoWrap: { display: "flex", justifyContent: "center", gap: 8, marginBottom: 15 },
+  logoText: { fontSize: 28, fontWeight: 900, color: COLORS.primary },
+  logoTag: { background: COLORS.primary, color: "#FFF", padding: "2px 10px", borderRadius: 8, fontSize: 14, fontWeight: 800 },
+  title: { fontSize: 22, fontWeight: 800, textAlign: "center", marginBottom: 20 },
+  nameInput: { width: "100%", height: 50, borderRadius: 12, border: "2px solid #E2E8F0", fontSize: 18, textAlign: "center", marginBottom: 15, boxSizing: "border-box" },
   gradeGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 },
-  gradeButton: { padding: 15, borderRadius: 15, border: "1px solid #E2E8F0", background: "#FFF", textAlign: "left", cursor: "pointer" },
-  gradeButtonTitle: { fontSize: 18, fontWeight: 800 },
-  gradeDesc: { fontSize: 12, color: "#64748B" },
-  quizHead: { display: "flex", justifyContent: "space-between", marginBottom: 20 },
-  quizGrade: { fontSize: 22, fontWeight: 800 },
-  progressBadge: { background: "#FFF1F2", color: "#E11D48", padding: "4px 10px", borderRadius: 10, fontWeight: 800 },
-  questionCard: { background: "#F8FAFC", padding: 20, borderRadius: 20, marginBottom: 20 },
-  questionConcept: { color: "#E11D48", fontSize: 14, fontWeight: 800, marginBottom: 8 },
-  questionText: { fontSize: 24, fontWeight: 800, lineHeight: 1.4 },
-  choiceList: { display: "grid", gap: 10, marginBottom: 20 },
-  choiceButton: { display: "flex", alignItems: "center", gap: 10, padding: 15, borderRadius: 15, border: "2px solid #E2E8F0", background: "#FFF", fontSize: 18, fontWeight: 700, textAlign: "left", cursor: "pointer", width: "100%" },
-  choiceIndex: { color: "#64748B", width: 20 },
+  gradeButton: { padding: 12, borderRadius: 12, border: "1px solid #E2E8F0", background: "#FFF", textAlign: "left", cursor: "pointer" },
+  gradeButtonTitle: { fontSize: 16, fontWeight: 800 },
+  gradeDesc: { fontSize: 11, color: "#64748B" },
+  quizHead: { display: "flex", justifyContent: "space-between", marginBottom: 15 },
+  quizGrade: { fontSize: 18, fontWeight: 800 },
+  progressBadge: { background: "#FFF1F2", color: "#E11D48", padding: "4px 10px", borderRadius: 20, fontSize: 12, fontWeight: 800 },
+  questionCard: { background: "#F8FAFC", padding: 20, borderRadius: 15, marginBottom: 15 },
+  questionText: { fontSize: 20, fontWeight: 800, lineHeight: 1.5 },
+  choiceList: { display: "grid", gap: 8, marginBottom: 15 },
+  choiceButton: { display: "flex", alignItems: "center", gap: 10, padding: 12, borderRadius: 12, border: "2px solid #F1F5F9", background: "#FFF", fontSize: 16, fontWeight: 600, textAlign: "left", cursor: "pointer", width: "100%" },
+  choiceIndex: { color: "#94A3B8", width: 15 },
   choiceSelected: { borderColor: "#E11D48", background: "#FFF1F2" },
   choiceCorrect: { borderColor: "#10B981", background: "#ECFDF5" },
   choiceWrong: { borderColor: "#E11D48", background: "#FFF1F2" },
-  primaryButton: { width: "100%", height: 60, borderRadius: 15, border: "none", background: COLORS.primaryGrad, color: "#FFF", fontSize: 20, fontWeight: 800, cursor: "pointer" },
-  resultScore: { fontSize: 60, fontWeight: 900, textAlign: "center", margin: "40px 0", color: "#0F172A" },
+  primaryButton: { width: "100%", height: 55, borderRadius: 12, border: "none", background: COLORS.primaryGrad, color: "#FFF", fontSize: 18, fontWeight: 800, cursor: "pointer" },
 };
