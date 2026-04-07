@@ -6,11 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>삼척JEET 수학 진단평가</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: true
+        },
+        options: {
+          skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
     
     <style>
-      /* 수식이 로딩될 때 깜빡거림을 방지하기 위한 팁 */
-      .math-text { min-height: 1em; display: inline-block; }
+      /* 수식이 그려지기 전 높이 확보 */
+      .math-text { min-height: 1.2em; display: inline-block; vertical-align: middle; }
+      body { margin: 0; padding: 0; background-color: #F1F5F9; }
     </style>
   </head>
   <body>
