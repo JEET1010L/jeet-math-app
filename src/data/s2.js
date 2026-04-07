@@ -1,78 +1,48 @@
 export const s2Questions = [
   { 
     id: 1, 
-    concept: "유리수와 순환소수", 
-    subConcept: "유리수의 뜻", 
+    concept: "유리수", 
+    subConcept: "뜻", 
     prompt: "다음 중 유리수가 아닌 것은?", 
-    // 앞에 공백을 한 칸씩 넣어서 번호와 강제로 떨어뜨렸습니다.
+    // 양옆에 공백을 넉넉히 넣었습니다. 이렇게 해야 번호와 안 겹칩니다.
     choices: [" 0 ", " \\frac{1}{2} ", " -3 ", " \\pi "], 
     answer: 3, 
-    explanation: "\\pi는 무리수입니다."
+    explanation: "\\pi는 무리수입니다." 
   },
   { 
     id: 2, 
-    concept: "유리수와 순환소수", 
-    subConcept: "유한소수 판별", 
+    concept: "유리수", 
+    subConcept: "유한소수", 
     prompt: "분수 \\frac{7}{20}을 소수로 나타내면?", 
     choices: [" 유한소수 ", " 순환소수 ", " 무한소수 ", " 정수 "], 
     answer: 0, 
-    explanation: "분모의 소인수가 2와 5뿐입니다."
+    explanation: "분모의 소인수가 2와 5뿐입니다." 
   },
   { 
     id: 3, 
-    concept: "유리수와 순환소수", 
-    subConcept: "순환소수의 표현", 
+    concept: "유리수", 
+    subConcept: "표현", 
     prompt: "0.333...을 순환마디로 나타내면?", 
     choices: [" 0.3 ", " 0.\\dot{3} ", " 0.33 ", " 0.\\dot{3}\\dot{3} "], 
     answer: 1, 
-    explanation: "반복되는 마디 위에 점을 찍습니다."
+    explanation: "반복되는 마디 위에 점을 찍습니다." 
+  },
+  { 
+    id: 4, 
+    concept: "지수법칙", 
+    subConcept: "곱셈", 
+    prompt: "a^3 \\times a^4을 간단히 하면?", 
+    choices: [" a^7 ", " a^{12} ", " 2a^7 ", " a^{34} "], 
+    answer: 0, 
+    explanation: "지수끼리 더합니다." 
+  },
+  { 
+    id: 5, 
+    concept: "지수법칙", 
+    subConcept: "거듭제곱", 
+    prompt: "(x^2)^3을 간단히 하면?", 
+    choices: [" x^5 ", " x^6 ", " x^8 ", " 3x^2 "], 
+    answer: 1, 
+    explanation: "지수끼리 곱합니다." 
   }
-  // ... (일단 3번까지만 먼저 적용해서 확인해 보세요!)
-  { id: 4, concept: "단항식의 계산", subConcept: "지수법칙", difficulty: 2, prompt: "a^3 \\times a^4을 간단히 하면?", choices: ["a^7", "a^{12}", "2a^7", "a^{34}"], answer: 0, explanation: "a^{3+4} = a^7입니다.", skill: "연산", required: true },
-  { id: 5, concept: "단항식의 계산", subConcept: "지수법칙(거듭제곱)", difficulty: 2, prompt: "(x^2)^3을 간단히 하면?", choices: ["x^5", "x^6", "x^8", "3x^2"], answer: 1, explanation: "x^{2 \\times 3} = x^6입니다.", skill: "연산", required: true },
-  { id: 6, concept: "부등식", subConcept: "일차부등식의 해", difficulty: 3, prompt: "2x - 4 > 0의 해를 구하면?", choices: ["x > 2", "x < 2", "x > -2", "x < -2"], answer: 0, explanation: "2x > 4 이므로 x > 2입니다.", skill: "해구하기", required: true },
-  { id: 7, concept: "연립방정식", subConcept: "가감법", difficulty: 3, prompt: "연립방정식 x+y=5, x-y=1 에서 x+2y의 값은?", choices: ["5", "6", "7", "8"], answer: 2, explanation: "x=3, y=2이므로 7입니다.", skill: "복합연산", required: true },
-  { id: 8, concept: "일차함수", subConcept: "기울기", difficulty: 2, prompt: "일차함수 y = 3x - 5의 기울기는?", choices: ["3", "-5", "5", "-3"], answer: 0, explanation: "기울기는 3입니다.", skill: "개념", required: true },
-  { id: 9, concept: "일차함수", subConcept: "y절편", difficulty: 2, prompt: "일차함수 y = -2x + 4의 y절편은?", choices: ["-2", "2", "4", "-4"], answer: 2, explanation: "y절편은 4입니다.", skill: "개념", required: true },
-  { id: 10, concept: "단항식의 계산", subConcept: "나눗셈", difficulty: 3, prompt: "12x^5 \\div 3x^2을 계산하면?", choices: ["4x^3", "4x^7", "9x^3", "36x^7"], answer: 0, explanation: "4x^3입니다.", skill: "연산", required: true },
-  { id: 11, concept: "유리수와 순환소수", subConcept: "순환소수를 분수로", difficulty: 3, prompt: "0.\\dot{5}를 분수로 나타내면?", choices: ["\\frac{5}{10}", "\\frac{5}{9}", "\\frac{5}{99}", "\\frac{1}{2}"], answer: 1, explanation: "순환마디 하나당 9를 분모에 씁니다.", skill: "변환", required: true },
-  { id: 12, concept: "단항식의 계산", subConcept: "지수법칙(나눗셈)", difficulty: 2, prompt: "a^{10} \\div a^2를 간단히 하면?", choices: ["a^5", "a^8", "a^{12}", "a^{20}"], answer: 1, explanation: "a^{10-2} = a^8입니다.", skill: "연산", required: true },
-  { id: 13, concept: "다항식의 계산", subConcept: "덧셈과 뺄셈", difficulty: 2, prompt: "(2x + 3y) + (x - y)를 계산하면?", choices: ["3x + 2y", "3x + 4y", "x + 2y", "2x + 2y"], answer: 0, explanation: "동류항끼리 더합니다.", skill: "연산", required: true },
-  { id: 14, concept: "부등식", subConcept: "부등식의 성질", difficulty: 2, prompt: "a < b일 때, 다음 중 옳지 않은 것은?", choices: ["a+2 < b+2", "a-3 < b-3", "2a < 2b", "-a < -b"], answer: 3, explanation: "음수를 곱하면 부등호 방향이 바뀝니다.", skill: "개념", required: true },
-  { id: 15, concept: "연립방정식", subConcept: "해의 정의", difficulty: 2, prompt: "x=1, y=2가 해인 방정식은?", choices: ["x+y=3", "x-y=1", "2x+y=5", "x+2y=3"], answer: 0, explanation: "1+2=3이 성립합니다.", skill: "판단", required: true },
-  { id: 16, concept: "일차함수", subConcept: "함수값", difficulty: 1, prompt: "f(x) = 2x + 1일 때, f(2)의 값은?", choices: ["3", "4", "5", "6"], answer: 2, explanation: "2(2)+1 = 5입니다.", skill: "연산", required: true },
-  { id: 17, concept: "유리수와 순환소수", subConcept: "순환마디", difficulty: 1, prompt: "0.123123\\dots의 순환마디는?", choices: ["1", "12", "123", "231"], answer: 2, explanation: "반복되는 마디는 123입니다.", skill: "개념", required: true },
-  { id: 18, concept: "단항식의 계산", subConcept: "분배법칙", difficulty: 3, prompt: "3x(2x-1)을 전개하면?", choices: ["6x-3", "6x^2-3", "6x^2-3x", "5x^2-3x"], answer: 2, explanation: "6x^2 - 3x입니다.", skill: "연산", required: true },
-  { id: 19, concept: "부등식", subConcept: "부등식의 표현", difficulty: 1, prompt: "x의 2배에서 3을 뺀 값은 5보다 크다를 부등식으로?", choices: ["2x-3 < 5", "2x-3 \\le 5", "2x-3 > 5", "2x-3 \\ge 5"], answer: 2, explanation: "크다를 뜻하는 > 를 씁니다.", skill: "표현", required: true },
-  { id: 20, concept: "연립방정식", subConcept: "대입법", difficulty: 3, prompt: "y=2x를 x+y=6에 대입하여 얻은 x의 값은?", choices: ["1", "2", "3", "4"], answer: 1, explanation: "x+2x=6 에서 3x=6, x=2입니다.", skill: "연산", required: true },
-  { id: 21, concept: "일차함수", subConcept: "평행이동", difficulty: 3, prompt: "y=2x를 y축 방향으로 3만큼 이동한 식은?", choices: ["y=2x+3", "y=2x-3", "y=2(x-3)", "y=5x"], answer: 0, explanation: "y축 이동은 상수항을 더합니다.", skill: "개념", required: true },
-  { id: 22, concept: "유리수와 순환소수", subConcept: "무한소수 분류", difficulty: 2, prompt: "다음 중 유리수가 아닌 무한소수는?", choices: ["0.\\dot{3}", "0.1212\\dots", "\\pi", "\\frac{1}{3}"], answer: 2, explanation: "원주율은 순환하지 않는 무한소수입니다.", skill: "분류", required: true },
-  { id: 23, concept: "단항식의 계산", subConcept: "계수", difficulty: 2, prompt: "-3x^2y의 계수는?", choices: ["3", "-3", "2", "1"], answer: 1, explanation: "문자 앞의 숫자인 -3입니다.", skill: "용어", required: true },
-  { id: 24, concept: "부등식", subConcept: "일차부등식 판별", difficulty: 2, prompt: "다음 중 일차부등식인 것은?", choices: ["x+2=0", "x^2+1>0", "x-3<5", "2=2"], answer: 2, explanation: "차수가 1인 부등식입니다.", skill: "분류", required: true },
-  { id: 25, concept: "연립방정식", subConcept: "해의 개수", difficulty: 4, prompt: "두 직선이 평행하면 연립방정식의 해의 개수는?", choices: ["1개", "2개", "무수히 많다", "없다"], answer: 3, explanation: "평행하면 만나는 점이 없으므로 해가 없습니다.", skill: "추론", required: true },
-  { id: 26, concept: "일차함수", subConcept: "x절편", difficulty: 3, prompt: "y=x-2의 x절편은?", choices: ["2", "-2", "0", "1"], answer: 0, explanation: "y=0일 때 x값은 2입니다.", skill: "연산", required: true },
-  { id: 27, concept: "다항식의 계산", subConcept: "동류항", difficulty: 2, prompt: "2a + 3b - a의 결과는?", choices: ["a+3b", "3a+3b", "2b", "5ab"], answer: 0, explanation: "a끼리 계산합니다.", skill: "연산", required: true },
-  { id: 28, concept: "부등식", subConcept: "자연수 해", difficulty: 3, prompt: "x < 3을 만족하는 자연수의 개수는?", choices: ["1개", "2개", "3개", "무수히 많다"], answer: 1, explanation: "자연수는 1, 2 두 개입니다.", skill: "분석", required: true },
-  { id: 29, concept: "연립방정식", subConcept: "복잡한 식", difficulty: 4, prompt: "0.1x + 0.2y = 0.5 에 10을 곱하면?", choices: ["x+2y=5", "10x+20y=50", "x+y=5", "0.1x+0.2y=5"], answer: 0, explanation: "모든 항에 10을 곱합니다.", skill: "변형", required: true },
-  { id: 30, concept: "일차함수", subConcept: "사분면", difficulty: 4, prompt: "y = -x - 1이 지나지 않는 사분면은?", choices: ["제1사분면", "제2사분면", "제3사분면", "제4사분면"], answer: 0, explanation: "기울기와 y절편이 모두 음수면 1사분면을 안 지납니다.", skill: "추론", required: true },
-  { id: 31, concept: "유리수와 순환소수", subConcept: "소수점 아래 자리", difficulty: 4, prompt: "0.\\dot{1}\\dot{2}의 소수점 아래 10번째 숫자는?", choices: ["1", "2", "0", "없다"], answer: 1, explanation: "1, 2가 반복되므로 짝수번째는 2입니다.", skill: "추론", required: true },
-  { id: 32, concept: "단항식의 계산", subConcept: "혼합계산", difficulty: 3, prompt: "2x \\times 3x^2은?", choices: ["6x^2", "5x^3", "6x^3", "6x^5"], answer: 2, explanation: "숫자는 곱하고 지수는 더합니다.", skill: "연산", required: true },
-  { id: 33, concept: "다항식의 계산", subConcept: "괄호 풀기", difficulty: 2, prompt: "-(x-y)와 같은 식은?", choices: ["-x-y", "-x+y", "x+y", "x-y"], answer: 1, explanation: "괄호 앞 마이너스는 부호를 모두 바꿉니다.", skill: "연산", required: true },
-  { id: 34, concept: "부등식", subConcept: "음수 나누기", difficulty: 3, prompt: "-2x < 6의 해는?", choices: ["x < -3", "x > -3", "x < 3", "x > 3"], answer: 1, explanation: "음수로 나누면 부등호 방향이 바뀝니다.", skill: "연산", required: true },
-  { id: 35, concept: "연립방정식", subConcept: "특수한 해", difficulty: 4, prompt: "두 식이 일치하면 해의 개수는?", choices: ["0개", "1개", "2개", "무수히 많다"], answer: 3, explanation: "모든 점에서 만나므로 해가 무수히 많습니다.", skill: "개념", required: true },
-  { id: 36, concept: "일차함수", subConcept: "함수의 정의", difficulty: 1, prompt: "다음 중 y가 x의 함수가 아닌 것은?", choices: ["y=x+1", "y=x^2", "x의 약수 y", "거리는 시간곱하기 속력"], answer: 2, explanation: "약수는 x값 하나에 y가 여러 개일 수 있습니다.", skill: "판단", required: true },
-  { id: 37, concept: "유리수와 순환소수", subConcept: "기약분수", difficulty: 2, prompt: "\\frac{3}{12}를 기약분수로 나타내면?", choices: ["\\frac{1}{4}", "\\frac{1}{3}", "\\frac{3}{12}", "0.25"], answer: 0, explanation: "3으로 약분합니다.", skill: "연산", required: true },
-  { id: 38, concept: "단항식의 계산", subConcept: "지수법칙(응용)", difficulty: 4, prompt: "2^3 \\times 5^3은 몇 자리 정수인가?", choices: ["3자리", "4자리", "5자리", "6자리"], answer: 1, explanation: "(2 \\times 5)^3 = 1000 이므로 4자리입니다.", skill: "추론", required: true },
-  { id: 39, concept: "다항식의 계산", subConcept: "다항식과 수의 곱", difficulty: 2, prompt: "2(a+2b)는?", choices: ["2a+2b", "2a+4b", "4ab", "2a^2+4b"], answer: 1, explanation: "각 항에 2를 곱합니다.", skill: "연산", required: true },
-  { id: 40, concept: "부등식", subConcept: "부등호 사용", difficulty: 1, prompt: "x는 3보다 작지 않다를 기호로?", choices: ["x < 3", "x > 3", "x \\le 3", "x \\ge 3"], answer: 3, explanation: "작지 않다는 크거나 같다는 뜻입니다.", skill: "표현", required: true },
-  { id: 41, concept: "연립방정식", subConcept: "활용", difficulty: 4, prompt: "닭과 토끼 합해서 10마리, 다리 합이 26개일 때 토끼는 몇 마리인가?", choices: ["2마리", "3마리", "4마리", "5마리"], answer: 1, explanation: "x+y=10, 2x+4y=26 을 풀면 y=3입니다.", skill: "모델링", required: true },
-  { id: 42, concept: "일차함수", subConcept: "나란한 직선", difficulty: 3, prompt: "y=2x와 평행하고 y절편이 1인 식은?", choices: ["y=x+2", "y=2x+1", "y=2x-1", "y=-2x+1"], answer: 1, explanation: "기울기가 같고 y절편이 1입니다.", skill: "연산", required: true },
-  { id: 43, concept: "유리수와 순환소수", subConcept: "순환마디 점", difficulty: 2, prompt: "0.121212\\dots의 올바른 표현은?", choices: ["0.\\dot{1}\\dot{2}", "0.1\\dot{2}", "0.\\dot{1}2", "0.12"], answer: 0, explanation: "반복되는 숫자 위에 모두 점을 찍습니다.", skill: "표현", required: true },
-  { id: 44, concept: "단항식의 계산", subConcept: "부호 결정", difficulty: 3, prompt: "(-x)^3의 결과는?", choices: ["x^3", "-x^3", "3x", "-3x"], answer: 1, explanation: "홀수 제곱은 마이너스가 유지됩니다.", skill: "연산", required: true },
-  { id: 45, concept: "다항식의 계산", subConcept: "식의 대입", difficulty: 3, prompt: "x=2, y=-1일 때 2x+y의 값은?", choices: ["1", "3", "5", "0"], answer: 1, explanation: "2(2)+(-1)=3입니다.", skill: "연산", required: true },
-  { id: 46, concept: "부등식", subConcept: "계수가 소수", difficulty: 3, prompt: "0.2x > 0.4의 해는?", choices: ["x > 2", "x < 2", "x > 0.2", "x < 0.2"], answer: 0, explanation: "양변을 0.2로 나눕니다.", skill: "연산", required: true },
-  { id: 47, concept: "연립방정식", subConcept: "상수항", difficulty: 2, prompt: "x-y=1 에서 x=2일 때 y값은?", choices: ["1", "-1", "2", "3"], answer: 0, explanation: "2-y=1 이므로 y=1입니다.", skill: "연산", required: true },
-  { id: 48, concept: "일차함수", subConcept: "그래프의 특징", difficulty: 2, prompt: "y=2x+1 그래프가 지나는 사분면이 아닌 것은?", choices: ["제1사분면", "제2사분면", "제3사분면", "제4사분면"], answer: 3, explanation: "기울기와 절편이 모두 양수면 4사분면을 안 지납니다.", skill: "분석", required: true },
-  { id: 49, concept: "유리수와 순환소수", subConcept: "유리수 분류", difficulty: 1, prompt: "모든 순환소수는 유리수이다. (O/X)", choices: ["O", "X"], answer: 0, explanation: "순환소수는 분수로 나타낼 수 있어 유리수입니다.", skill: "개념", required: true },
-  { id: 50, concept: "일차함수", subConcept: "증가/감소", difficulty: 2, prompt: "y=-3x+5에서 x가 증가할 때 y는?", choices: ["증가한다", "감소한다", "변하지 않는다", "알 수 없다"], answer: 1, explanation: "기울기가 음수이므로 x가 커지면 y는 작아집니다.", skill: "개념", required: true }
 ];
