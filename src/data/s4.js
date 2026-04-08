@@ -1,4 +1,4 @@
-export const s4 = [
+export const s4Questions = [
   // --- 1. 다항식의 연산 ---
   { id: 1, concept: "다항식의 연산", subconcept: "덧셈과 뺄셈", difficulty: 1, prompt: "$A = x^2 - x + 2, B = 2x^2 + 3x - 1$일 때, $A+B$는?", choices: ["$3x^2+2x+1$", "$3x^2-2x+1$", "$x^2+4x-3$", "$3x^2+4x+1$", "$3x^2+2x-1$"], answer: 0, explanation: "$(x^2+2x^2) + (-x+3x) + (2-1) = 3x^2+2x+1$" },
   { id: 2, concept: "다항식의 연산", subconcept: "곱셈공식", difficulty: 2, prompt: "$(x+3)^2 - (x-3)^2$을 간단히 하면?", choices: ["$2x^2+18$", "$12x$", "$6x$", "$18$", "$0$"], answer: 1, explanation: "$(x^2+6x+9) - (x^2-6x+9) = 12x$" },
