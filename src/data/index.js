@@ -13,6 +13,7 @@ import { h3Questions } from "./h3";
 import { s1Questions } from "./s1";
 import { s2Questions } from "./s2";
 import { s3Questions } from "./s3";
+import { s4Questions } from "./s4";
 
 export const dataMap = {
   g1: g1Questions,
@@ -30,6 +31,7 @@ export const dataMap = {
   s1: s1Questions,
   s2: s2Questions,
   s3: s3Questions,
+  s4: s4Questions,
   
 };
 
@@ -47,6 +49,7 @@ export const gradeLabels = {
   h2: "JEET고2",
   h3: "JEET고3",
   s1: "JEET삼일중1 시험대비🔥",
-  s2: "JEET청아,삼일중2 시험대비🔥",
-  s3: "JEET청아,삼척중3 시험대비🔥",
+  s2: "JEET청아,삼척중2 시험대비🔥",
+  s3: "JEET청아,삼일중3 시험대비🔥",
+  s4: "JEET삼척,삼여고1 시험대비🔥",
 };
