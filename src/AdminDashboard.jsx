@@ -120,7 +120,8 @@ export default function AdminDashboard() {
             {results.map((r, idx) => (
               <div
                 key={r.id || idx}
-                onClick={() => navigate("/report", { state: r })}
+                // ⭐ 핵심 수정: 리포트로 이동할 때 관리자 권한(isAdmin)을 실어서 보냅니다.
+                onClick={() => navigate("/report", { state: { ...r, isAdmin: true } })}
                 style={styles.resultCard}
               >
                 <div style={styles.cardTop}>
