@@ -12,6 +12,7 @@ const COLORS = {
   line: "#E2E8F0",
 };
 
+// 🔒 관리자 비밀번호 (필요시 수정하세요)
 const ADMIN_PASSWORD = "1010";
 
 export default function AdminDashboard() {
@@ -21,6 +22,7 @@ export default function AdminDashboard() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // 1. 로그인 상태 유지 확인
   useEffect(() => {
     const savedAuth = sessionStorage.getItem("jeet_admin_auth");
     if (savedAuth === "true") {
@@ -28,6 +30,7 @@ export default function AdminDashboard() {
     }
   }, []);
 
+  // 2. 인증 성공 시 데이터 불러오기
   useEffect(() => {
     if (!isAuthed) return;
 
@@ -39,13 +42,11 @@ export default function AdminDashboard() {
         console.error("데이터 불러오기 실패", e);
       }
     }
-
     load();
   }, [isAuthed]);
 
   const handleLogin = (e) => {
     e.preventDefault();
-
     if (password === ADMIN_PASSWORD) {
       setIsAuthed(true);
       sessionStorage.setItem("jeet_admin_auth", "true");
@@ -62,32 +63,27 @@ export default function AdminDashboard() {
     setResults([]);
   };
 
+  // --- 로그인 화면 ---
   if (!isAuthed) {
     return (
       <div style={styles.page}>
         <div style={styles.loginWrap}>
           <div style={styles.loginCard}>
             <div style={styles.topBand} />
-            <div style={styles.brand}>JEET 관리자 잠금</div>
-            <div style={styles.loginTitle}>관리자 전용 페이지</div>
-            <div style={styles.loginSub}>
-              상담 기록과 학생 결과 보호를 위해 비밀번호를 입력하세요.
-            </div>
+            <div style={styles.brand}>JEET 관리자 모드</div>
+            <div style={styles.loginTitle}>Access Denied</div>
+            <div style={styles.loginSub}>상담 기록 보호를 위해 비밀번호를 입력하세요.</div>
 
             <form onSubmit={handleLogin} style={{ marginTop: 20 }}>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="관리자 비밀번호"
+                placeholder="비밀번호 입력"
                 style={styles.input}
               />
-
-              {error ? <div style={styles.errorText}>{error}</div> : null}
-
-              <button type="submit" style={styles.primaryButton}>
-                관리자 입장
-              </button>
+              {error && <div style={styles.errorText}>{error}</div>}
+              <button type="submit" style={styles.primaryButton}>관리자 로그인</button>
             </form>
           </div>
         </div>
@@ -95,54 +91,47 @@ export default function AdminDashboard() {
     );
   }
 
+  // --- 메인 대시보드 화면 ---
   return (
     <div style={styles.page}>
       <div style={{ maxWidth: 900, margin: "0 auto", marginBottom: 24 }}>
         <div style={styles.headerCard}>
           <div>
             <div style={styles.headerTitle}>JEET 진단 관리 시스템</div>
-            <div style={styles.headerSub}>
-              학생 개념 진단 결과를 기반으로 상담이 가능합니다
-            </div>
+            <div style={styles.headerSub}>학생별 상세 분석 리포트를 확인하실 수 있습니다.</div>
           </div>
-
-          <button onClick={handleLogout} style={styles.logoutButton}>
-            로그아웃
-          </button>
+          <button onClick={handleLogout} style={styles.logoutButton}>로그아웃</button>
         </div>
       </div>
 
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
         {results.length === 0 ? (
-          <div style={styles.emptyCard}>저장된 결과가 없습니다</div>
+          <div style={styles.emptyCard}>저장된 진단 결과가 아직 없습니다.</div>
         ) : (
           <div style={{ display: "grid", gap: 16 }}>
             {results.map((r, idx) => (
               <div
                 key={r.id || idx}
-                // ⭐ 핵심 수정: 리포트로 이동할 때 관리자 권한(isAdmin)을 실어서 보냅니다.
+                // ⭐ 핵심: 클릭 시 isAdmin: true를 넘겨서 리포트가 관리자용으로 뜨게 함
                 onClick={() => navigate("/report", { state: { ...r, isAdmin: true } })}
                 style={styles.resultCard}
               >
                 <div style={styles.cardTop}>
                   <div>
-                    <div style={styles.nameText}>{r.studentName || "이름 없음"}</div>
+                    <div style={styles.nameText}>{r.studentName || "익명 학생"}</div>
                     <div style={styles.gradeText}>{r.gradeLabel}</div>
                   </div>
-
-                  <div style={styles.levelBadge}>{r.level}</div>
+                  <div style={styles.levelBadge}>{r.level} 레벨</div>
                 </div>
 
-                <div style={styles.scoreText}>
-                  {r.score}/{r.total} ({r.scoreRate}%)
+                <div style={styles.scoreRow}>
+                  <span style={styles.scoreText}>{r.scoreRate}%</span>
+                  <span style={styles.scoreDetail}>({r.score} / {r.total} 문항)</span>
                 </div>
 
-                <div style={styles.metaText}>
-                  <div>강점: {r.strongConcepts?.join(", ") || "없음"}</div>
-                  <div>보완: {r.weakConcepts?.join(", ") || "없음"}</div>
+                <div style={styles.commentPreview}>
+                  {r.consultingComment?.substring(0, 100)}...
                 </div>
-
-                <div style={styles.commentBox}>{r.consultingComment}</div>
               </div>
             ))}
           </div>
@@ -153,165 +142,28 @@ export default function AdminDashboard() {
 }
 
 const styles = {
-  page: {
-    minHeight: "100vh",
-    background: COLORS.bg,
-    padding: 20,
-    fontFamily: "Pretendard, Apple SD Gothic Neo, Noto Sans KR, sans-serif",
-  },
-  loginWrap: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  loginCard: {
-    width: "100%",
-    maxWidth: 460,
-    background: COLORS.card,
-    borderRadius: 24,
-    boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
-    border: `1px solid ${COLORS.line}`,
-    padding: 24,
-    overflow: "hidden",
-  },
-  topBand: {
-    height: 8,
-    borderRadius: 999,
-    background: COLORS.grad,
-    marginBottom: 20,
-  },
-  brand: {
-    fontSize: 16,
-    fontWeight: 900,
-    color: COLORS.primary,
-    marginBottom: 8,
-  },
-  loginTitle: {
-    fontSize: 28,
-    fontWeight: 900,
-    color: COLORS.text,
-    marginBottom: 8,
-  },
-  loginSub: {
-    color: COLORS.sub,
-    fontSize: 15,
-    lineHeight: 1.6,
-  },
-  input: {
-    width: "100%",
-    height: 54,
-    borderRadius: 14,
-    border: `1px solid ${COLORS.line}`,
-    padding: "0 16px",
-    fontSize: 16,
-    boxSizing: "border-box",
-    marginBottom: 14,
-  },
-  errorText: {
-    color: "#BE123C",
-    fontSize: 14,
-    marginBottom: 12,
-    fontWeight: 700,
-  },
-  primaryButton: {
-    width: "100%",
-    height: 54,
-    border: "none",
-    borderRadius: 14,
-    background: COLORS.grad,
-    color: "white",
-    fontWeight: 900,
-    fontSize: 16,
-    cursor: "pointer",
-    boxShadow: "0 10px 24px rgba(225,29,72,0.22)",
-  },
-  headerCard: {
-    borderRadius: 24,
-    padding: 20,
-    background: COLORS.grad,
-    color: "white",
-    boxShadow: "0 15px 30px rgba(225,29,72,0.25)",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 16,
-  },
-  headerTitle: {
-    fontSize: 26,
-    fontWeight: 900,
-  },
-  headerSub: {
-    marginTop: 6,
-    opacity: 0.92,
-  },
-  logoutButton: {
-    border: "none",
-    background: "rgba(255,255,255,0.18)",
-    color: "white",
-    padding: "10px 14px",
-    borderRadius: 12,
-    fontWeight: 800,
-    cursor: "pointer",
-    whiteSpace: "nowrap",
-  },
-  emptyCard: {
-    padding: 40,
-    textAlign: "center",
-    background: "white",
-    borderRadius: 20,
-    border: `1px solid ${COLORS.line}`,
-  },
-  resultCard: {
-    borderRadius: 20,
-    padding: 20,
-    background: COLORS.card,
-    boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
-    cursor: "pointer",
-    border: `1px solid ${COLORS.line}`,
-  },
-  cardTop: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    gap: 16,
-  },
-  nameText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: COLORS.text,
-  },
-  gradeText: {
-    color: COLORS.sub,
-    marginTop: 4,
-  },
-  levelBadge: {
-    background: COLORS.grad,
-    color: "white",
-    padding: "6px 12px",
-    borderRadius: 10,
-    fontWeight: "bold",
-    whiteSpace: "nowrap",
-  },
-  scoreText: {
-    marginTop: 12,
-    fontSize: 20,
-    fontWeight: "bold",
-    color: COLORS.text,
-  },
-  metaText: {
-    marginTop: 10,
-    fontSize: 14,
-    color: COLORS.sub,
-    lineHeight: 1.7,
-  },
-  commentBox: {
-    marginTop: 12,
-    fontSize: 14,
-    background: "#F1F5F9",
-    padding: 10,
-    borderRadius: 10,
-    color: COLORS.text,
-    lineHeight: 1.6,
-  },
+  page: { minHeight: "100vh", background: COLORS.bg, padding: "40px 20px", fontFamily: "Pretendard, sans-serif" },
+  loginWrap: { display: "flex", justifyContent: "center", alignItems: "center", height: "70vh" },
+  loginCard: { width: "100%", maxWidth: 400, background: "#FFF", borderRadius: 24, padding: 32, boxShadow: "0 20px 40px rgba(0,0,0,0.1)", border: `1px solid ${COLORS.line}` },
+  topBand: { height: 6, background: COLORS.grad, borderRadius: 99, marginBottom: 24 },
+  brand: { fontSize: 14, fontWeight: 900, color: COLORS.primary, marginBottom: 8 },
+  loginTitle: { fontSize: 26, fontWeight: 900, color: "#0F172A" },
+  loginSub: { fontSize: 14, color: COLORS.sub, marginTop: 8 },
+  input: { width: "100%", height: 50, borderRadius: 12, border: `1px solid ${COLORS.line}`, padding: "0 16px", fontSize: 16, marginTop: 20, boxSizing: "border-box" },
+  errorText: { color: COLORS.primary, fontSize: 13, marginTop: 10, fontWeight: 600 },
+  primaryButton: { width: "100%", height: 50, background: COLORS.grad, color: "#FFF", border: "none", borderRadius: 12, fontSize: 16, fontWeight: 800, marginTop: 16, cursor: "pointer" },
+  headerCard: { background: COLORS.grad, padding: "24px 32px", borderRadius: 24, display: "flex", justifyContent: "space-between", alignItems: "center", color: "#FFF", boxShadow: "0 10px 20px rgba(225,29,72,0.2)" },
+  headerTitle: { fontSize: 24, fontWeight: 900 },
+  headerSub: { fontSize: 14, opacity: 0.9, marginTop: 4 },
+  logoutButton: { background: "rgba(255,255,255,0.2)", border: "none", color: "#FFF", padding: "8px 16px", borderRadius: 10, fontWeight: 700, cursor: "pointer" },
+  resultCard: { background: "#FFF", padding: 24, borderRadius: 20, border: `1px solid ${COLORS.line}`, cursor: "pointer", transition: "transform 0.2s" },
+  cardTop: { display: "flex", justifyContent: "space-between", alignItems: "flex-start" },
+  nameText: { fontSize: 18, fontWeight: 800, color: "#1E293B" },
+  gradeText: { fontSize: 14, color: COLORS.sub, marginTop: 2 },
+  levelBadge: { background: "#F1F5F9", color: COLORS.primary, padding: "4px 12px", borderRadius: 8, fontSize: 13, fontWeight: 800 },
+  scoreRow: { marginTop: 16, display: "flex", alignItems: "baseline", gap: 8 },
+  scoreText: { fontSize: 28, fontWeight: 900, color: COLORS.primary },
+  scoreDetail: { fontSize: 14, color: COLORS.sub },
+  commentPreview: { marginTop: 12, fontSize: 14, color: "#475569", lineHeight: 1.5, background: "#F8FAFC", padding: 12, borderRadius: 12 },
+  emptyCard: { textAlign: "center", padding: 60, color: COLORS.sub, background: "#FFF", borderRadius: 24, border: `2px dashed ${COLORS.line}` }
 };
