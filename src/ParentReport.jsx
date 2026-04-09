@@ -1,16 +1,13 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { TEXT } from "./constants/text";
+import { ALL_CONCEPT_DATA } from "./utils/report"; // 아까 만든 report.js에서 데이터 가져오기
 
 const COLORS = {
   primary: "#E11D48",
-  primarySoft: "#FB7185",
   grad: "linear-gradient(135deg, #E11D48 0%, #FB7185 100%)",
   bg: "#F8FAFC",
-  white: "#FFFFFF",
-  text: "#0F172A",
   sub: "#64748B",
   line: "#E2E8F0",
   successBg: "#ECFDF5",
@@ -26,45 +23,50 @@ export default function ParentReport() {
   const [isExporting, setIsExporting] = useState(false);
 
   const result = location.state;
+  const isAdmin = result?.isAdmin === true; // 관리자 출입증 확인
 
-  // ⭐ 관리자 여부 확인 (AdminDashboard에서 보낸 isAdmin: true 값 체크)
-  const isAdmin = result?.isAdmin === true;
+  // 🧠 [지능형 멘트 생성 엔진] 
+  // - 이미 저장된 코멘트가 있어도, 리포트를 열 때 실시간으로 더 정교하게 생성합니다.
+  const professionalComment = useMemo(() => {
+    if (!result) return "";
+    
+    const { studentName, scoreRate, gradeCode, strongConcepts = [], weakConcepts = [] } = result;
+    // 학년 코드에 맞는 DB 선택 (기본값 S3)
+    const db = ALL_CONCEPT_DATA[gradeCode] || ALL_CONCEPT_DATA["S3"];
 
-  if (!result) {
-    return (
-      <div style={styles.page}>
-        <div style={styles.wrap}>
-          <div style={styles.card}>
-            <h2 style={{ marginTop: 0 }}>리포트 데이터가 없습니다</h2>
-            <p style={{ color: COLORS.sub }}>
-              정상적인 경로로 접근해주세요.
-            </p>
-            <button style={styles.primaryButton} onClick={() => navigate("/")}>
-              메인으로 이동
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+    // 1. 강점 분석 (첫 번째 강점 활용)
+    const sText = strongConcepts.length > 0 
+      ? db.STRENGTH[strongConcepts[0]] || "수학적 기본기가 탄탄하며 성실한 학습 태도를 보여줍니다."
+      : "기본 개념을 차근차근 익히며 문제 해결을 위한 집중력을 발휘하고 있습니다.";
 
+    // 2. 약점 및 보완 분석 (최대 2개 조합)
+    const wText = weakConcepts.length > 0
+      ? weakConcepts.slice(0, 2).map(con => db.WEAKNESS[con] || `${con} 영역의 보완 학습이 필요합니다.`).join(" 또한 ")
+      : "현재 특별한 취약점 없이 고른 성취도를 보이고 있는 안정적인 상태입니다.";
+
+    // 3. 전문가 총평 (점수대별)
+    let advice = "";
+    if (scoreRate >= 90) advice = " 현재의 완벽함에 안주하지 말고 고난도 심화 유형을 통해 상위 1%의 사고력을 다져야 합니다.";
+    else if (scoreRate >= 70) advice = " 아는 문제를 틀리지 않는 '실수 제로' 훈련이 병행된다면 충분히 최상위권 진입이 가능합니다.";
+    else advice = " 진도를 서두르기보다 약점 개념을 완벽히 내 것으로 만드는 '후퇴 없는 전진'이 필요한 시기입니다. 저희가 밀착 관리하겠습니다.";
+
+    return `${studentName} 학생은 ${sText} 다만, ${wText}${advice}`;
+  }, [result]);
+
+  if (!result) return <div style={{padding: 50, textAlign: 'center'}}>리포트 데이터가 없습니다.</div>;
+
+  // PDF 저장 기능
   const handleExportPdf = async () => {
     if (!reportRef.current) return;
     try {
       setIsExporting(true);
-      const canvas = await html2canvas(reportRef.current, {
-        scale: 2,
-        backgroundColor: "#ffffff",
-      });
+      const canvas = await html2canvas(reportRef.current, { scale: 2, backgroundColor: "#ffffff" });
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
-      const pageWidth = 210;
-      const margin = 10;
-      const usableWidth = pageWidth - margin * 2;
-      const imgWidth = usableWidth;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      pdf.addImage(imgData, "PNG", margin, margin, imgWidth, imgHeight);
-      pdf.save(`${result.studentName}_${result.gradeLabel}_리포트.pdf`);
+      pdf.addImage(imgData, "PNG", 10, 10, 190, (canvas.height * 190) / canvas.width);
+      pdf.save(`${result.studentName}_진단리포트.pdf`);
+    } catch (err) {
+      alert("PDF 생성 중 오류가 발생했습니다.");
     } finally {
       setIsExporting(false);
     }
@@ -73,151 +75,113 @@ export default function ParentReport() {
   return (
     <div style={styles.page}>
       <div style={styles.wrap}>
+        {/* 상단 버튼 영역 */}
         <div style={styles.topActions}>
-          {/* ⭐ 관리자만 목록으로 돌아가기 버튼 보임 */}
           {isAdmin && (
             <button style={styles.secondaryButton} onClick={() => navigate("/admin")}>
-              관리 대시보드로
+              관리 대시보드
             </button>
           )}
           <button style={styles.primaryButton} onClick={handleExportPdf}>
-            {isExporting ? "PDF 생성 중..." : "리포트 PDF 저장"}
+            {isExporting ? "생성 중..." : "리포트 PDF 저장"}
           </button>
         </div>
 
+        {/* 리포트 본문 (PDF로 찍히는 영역) */}
         <div ref={reportRef} style={styles.reportCard}>
           <div style={styles.headerBand} />
-
           <div style={styles.logoWrap}>
-            <div style={styles.logoText}>{TEXT.BRAND_NAME}</div>
-            <div style={styles.logoTag}>{TEXT.BRAND_SUBJECT}</div>
+            <div style={styles.logoText}>JEET</div>
+            <div style={styles.logoTag}>MATHEMATICS</div>
           </div>
 
           <div style={{ textAlign: "center", marginBottom: 28 }}>
-            <div style={styles.title}>학년별 필수개념 진단 리포트</div>
-            <div style={styles.subtitle}>
-              학생의 현재 수준과 보완이 필요한 개념을 정리한 보고서입니다.
-            </div>
+            <div style={styles.title}>실력 진단 분석 리포트</div>
+            <div style={styles.subtitle}>Personalized Diagnostic & Strategy Report</div>
           </div>
 
+          {/* 기본 정보 */}
           <div style={styles.infoGrid}>
-            <InfoCard label="학생명" value={result.studentName || "미입력"} />
-            <InfoCard label="진단 과정" value={result.gradeLabel || "-"} />
-            {/* ⭐ 관리자는 정확한 점수, 부모님은 분석 완료 문구 */}
-            <InfoCard 
-              label={isAdmin ? "원점수" : "진단 결과"} 
-              value={isAdmin ? `${result.score}/${result.total}` : "정밀 분석 완료"} 
-            />
-            <InfoCard label="성취 레벨" value={result.level || "-"} />
+            <InfoItem label="학생명" value={result.studentName} />
+            <InfoItem label="진단 학년" value={result.gradeLabel} />
+            <InfoItem label={isAdmin ? "진단 점수" : "진단 상태"} value={isAdmin ? `${result.score} / ${result.total}` : "분석 완료"} />
+            <InfoItem label="성취도 레벨" value={`${result.level}등급`} />
           </div>
 
-          <Section title="1. 종합 평가">
+          {/* 종합 평가 (자동 멘트 출력 핵심 섹션) */}
+          <section style={{ marginBottom: 30 }}>
+            <h3 style={styles.sectionTitle}>1. 종합 학습 진단</h3>
             <div style={styles.summaryCard}>
-              {/* ⭐ 관리자 모드에서만 정답률 수치 크게 표시 */}
               {isAdmin && <div style={styles.summaryRate}>정답률 {result.scoreRate}%</div>}
-              <p style={styles.summaryText}>{result.consultingComment}</p>
+              <p style={styles.summaryText}>{professionalComment}</p>
             </div>
-          </Section>
+          </section>
 
-          <Section title="2. 강점 개념">
-            {result.strongConcepts?.length ? (
-              <div style={styles.tagWrap}>
-                {result.strongConcepts.map((concept) => (
-                  <span key={concept} style={styles.strongTag}>{concept}</span>
-                ))}
+          {/* 세부 영역 분석 */}
+          <section style={{ marginBottom: 30 }}>
+            <h3 style={styles.sectionTitle}>2. 영역별 상세 분석</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 15 }}>
+              <div style={styles.conceptBox}>
+                <div style={{ color: COLORS.successText, fontWeight: 900, marginBottom: 10, fontSize: 14 }}>✓ 강점 영역</div>
+                <div style={styles.tagWrap}>
+                  {result.strongConcepts?.length > 0 ? (
+                    result.strongConcepts.map(c => <span key={c} style={styles.tag}>{c}</span>)
+                  ) : <span style={styles.noData}>해당 없음</span>}
+                </div>
               </div>
-            ) : (
-              <p style={styles.emptyText}>기본 개념 학습을 충실히 진행 중입니다.</p>
-            )}
-          </Section>
-
-          <Section title="3. 보완 필요 개념">
-            {result.weakConcepts?.length ? (
-              <div style={{ display: "grid", gap: 12 }}>
-                {result.weakConcepts.map((concept) => (
-                  <div key={concept} style={styles.weakCard}>
-                    <div style={styles.weakTitle}>{concept}</div>
-                    <div style={styles.weakText}>
-                      해당 단원의 기본 원리 복습 후 유형 문제풀이가 권장됩니다.
-                    </div>
-                  </div>
-                ))}
+              <div style={styles.conceptBox}>
+                <div style={{ color: COLORS.warnText, fontWeight: 900, marginBottom: 10, fontSize: 14 }}>! 보완 필요 영역</div>
+                <div style={styles.tagWrap}>
+                  {result.weakConcepts?.length > 0 ? (
+                    result.weakConcepts.map(c => <span key={c} style={styles.tagWarn}>{c}</span>)
+                  ) : <span style={styles.noData}>완벽한 성취도</span>}
+                </div>
               </div>
-            ) : (
-              <p style={styles.emptyText}>모든 영역에서 고른 성취도를 보이고 있습니다.</p>
-            )}
-          </Section>
-
-          <Section title="4. 향후 학습 안내">
-            <div style={styles.memoCard}>
-              진단 결과 {result.level} 수준의 성취를 보이고 있습니다. 
-              {isAdmin ? (
-                // 관리자용 추가 메모
-                <span style={{color: COLORS.primary, fontWeight: 'bold'}}> [관리자 확인: 위 학생은 점수 대비 특정 오답 패턴을 분석하여 상담 바랍니다.]</span>
-              ) : (
-                // 부모님용 격려 메모
-                " 강점은 더욱 살리고 부족한 개념은 맞춤형 클리닉을 통해 보완하여 완벽한 실력을 만들겠습니다."
-              )}
             </div>
-          </Section>
+          </section>
 
-          <div style={styles.footer}>
-            본 리포트는 {TEXT.BRAND_NAME} 진단 시스템에 의해 발행되었습니다.
-          </div>
+          <div style={styles.footer}>본 분석 결과는 JEET 수학학원의 전문 진단 시스템에 의해 생성되었습니다.</div>
         </div>
       </div>
     </div>
   );
 }
 
-// --- 하위 컴포넌트들 ---
-function Section({ title, children }) {
+// 정보 표시 카드 컴포넌트
+function InfoItem({ label, value }) {
   return (
-    <section style={{ marginBottom: 28 }}>
-      <h3 style={styles.sectionTitle}>{title}</h3>
-      {children}
-    </section>
-  );
-}
-
-function InfoCard({ label, value }) {
-  return (
-    <div style={styles.infoCard}>
+    <div style={styles.infoItem}>
       <div style={styles.infoLabel}>{label}</div>
       <div style={styles.infoValue}>{value}</div>
     </div>
   );
 }
 
-// --- 스타일 (기존 유지) ---
 const styles = {
-  page: { minHeight: "100vh", background: "#F8FAFC", padding: "20px 12px 40px", fontFamily: "Pretendard, sans-serif" },
-  wrap: { maxWidth: 920, margin: "0 auto" },
+  page: { minHeight: "100vh", background: "#F1F5F9", padding: "20px 10px", fontFamily: "'Pretendard', sans-serif" },
+  wrap: { maxWidth: 850, margin: "0 auto" },
   topActions: { display: "flex", gap: 10, justifyContent: "flex-end", marginBottom: 16 },
-  reportCard: { position: "relative", background: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: 28, padding: 28, boxShadow: "0 10px 30px rgba(0,0,0,0.05)" },
-  headerBand: { height: 8, background: COLORS.grad, borderRadius: '999px 999px 0 0', margin: "-12px -12px 24px -12px" },
-  logoWrap: { display: "flex", justifyContent: "center", alignItems: "center", gap: 10, marginBottom: 18 },
-  logoText: { fontSize: 32, fontWeight: 900, color: COLORS.primary },
-  logoTag: { background: COLORS.grad, color: "#FFF", padding: "4px 10px", borderRadius: 8, fontWeight: 800, fontSize: 16 },
-  title: { fontSize: 30, fontWeight: 900 },
-  subtitle: { marginTop: 8, fontSize: 14, color: COLORS.sub },
-  infoGrid: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10, marginBottom: 28 },
-  infoCard: { border: "1px solid #E2E8F0", background: "#FAFAFA", padding: 14, borderRadius: 16, textAlign: 'center' },
-  infoLabel: { fontSize: 12, color: COLORS.sub },
-  infoValue: { marginTop: 6, fontWeight: 800, fontSize: 16 },
-  sectionTitle: { fontSize: 20, fontWeight: 900, marginBottom: 12, borderLeft: `4px solid ${COLORS.primary}`, paddingLeft: 10 },
-  summaryCard: { background: "#FFF7F9", border: "1px solid #FFD5DF", borderRadius: 18, padding: 18 },
-  summaryRate: { fontSize: 20, fontWeight: 900, color: COLORS.primary, marginBottom: 8 },
-  summaryText: { margin: 0, fontSize: 15, lineHeight: 1.7 },
-  tagWrap: { display: "flex", flexWrap: "wrap", gap: 8 },
-  strongTag: { background: COLORS.successBg, color: COLORS.successText, padding: "8px 12px", borderRadius: 999, fontSize: 13, fontWeight: 800 },
-  weakCard: { border: "1px solid #FED7AA", background: COLORS.warnBg, padding: 14, borderRadius: 16 },
-  weakTitle: { fontWeight: 800, color: COLORS.warnText, marginBottom: 4 },
-  weakText: { fontSize: 13, color: "#9A3412" },
-  memoCard: { border: "1px solid #E2E8F0", padding: 16, borderRadius: 16, fontSize: 14, lineHeight: 1.7 },
-  emptyText: { color: COLORS.sub, fontSize: 14 },
-  footer: { marginTop: 30, textAlign: 'center', fontSize: 12, color: "#94A3B8", borderTop: "1px solid #E2E8F0", paddingTop: 15 },
-  primaryButton: { border: "none", background: COLORS.grad, color: "#FFF", borderRadius: 12, padding: "10px 16px", fontWeight: 800, cursor: "pointer" },
-  secondaryButton: { border: "1px solid #E2E8F0", background: "#FFF", borderRadius: 12, padding: "10px 16px", fontWeight: 800, cursor: "pointer" },
-  card: { background: "#FFF", padding: 30, borderRadius: 20, textAlign: 'center' }
+  reportCard: { background: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: 28, padding: "40px 35px", boxShadow: "0 15px 35px rgba(0,0,0,0.08)", position: 'relative', overflow: 'hidden' },
+  headerBand: { height: 10, background: COLORS.grad, position: 'absolute', top: 0, left: 0, right: 0 },
+  logoWrap: { display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginBottom: 15, marginTop: 10 },
+  logoText: { fontSize: 32, fontWeight: 900, color: COLORS.primary, letterSpacing: "-1px" },
+  logoTag: { background: "#0F172A", color: "#FFF", padding: "2px 8px", borderRadius: 6, fontSize: 12, fontWeight: 700 },
+  title: { fontSize: 28, fontWeight: 900, color: "#1E293B", letterSpacing: "-0.5px" },
+  subtitle: { fontSize: 15, color: COLORS.sub, marginTop: 6, fontWeight: 500 },
+  infoGrid: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 35, marginTop: 20 },
+  infoItem: { background: "#F8FAFC", padding: "18px 10px", borderRadius: 20, textAlign: 'center', border: "1px solid #F1F5F9" },
+  infoLabel: { fontSize: 12, color: COLORS.sub, fontWeight: 600, marginBottom: 6 },
+  infoValue: { fontSize: 17, fontWeight: 800, color: "#0F172A" },
+  sectionTitle: { fontSize: 19, fontWeight: 900, marginBottom: 15, color: "#1E293B", display: 'flex', alignItems: 'center', gap: 10 },
+  summaryCard: { background: "#FFF1F2", border: "1px solid #FECDD3", borderRadius: 24, padding: "25px 28px", position: 'relative' },
+  summaryRate: { fontSize: 22, fontWeight: 900, color: COLORS.primary, marginBottom: 12 },
+  summaryText: { margin: 0, fontSize: 16, lineHeight: 1.8, color: "#334155", wordBreak: 'keep-all' },
+  conceptBox: { background: "#F8FAFC", border: "1px solid #E2E8F0", padding: "20px", borderRadius: 24 },
+  tagWrap: { display: 'flex', flexWrap: 'wrap', gap: 8 },
+  tag: { background: COLORS.successBg, color: COLORS.successText, padding: '6px 12px', borderRadius: 10, fontSize: 13, fontWeight: 700, border: "1px solid #D1FAE5" },
+  tagWarn: { background: COLORS.warnBg, color: COLORS.warnText, padding: '6px 12px', borderRadius: 10, fontSize: 13, fontWeight: 700, border: "1px solid #FFEDD5" },
+  noData: { fontSize: 13, color: "#94A3B8", fontStyle: 'italic' },
+  footer: { marginTop: 50, textAlign: 'center', fontSize: 13, color: "#94A3B8", borderTop: "1px solid #F1F5F9", paddingTop: 20 },
+  primaryButton: { border: "none", background: COLORS.grad, color: "#FFF", borderRadius: 12, padding: "12px 24px", fontWeight: 800, cursor: "pointer", boxShadow: "0 4px 12px rgba(225,29,72,0.3)" },
+  secondaryButton: { border: "1px solid #E2E8F0", background: "#FFF", borderRadius: 12, padding: "12px 24px", fontWeight: 800, cursor: "pointer", color: "#475569" }
 };
