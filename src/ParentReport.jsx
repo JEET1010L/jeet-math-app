@@ -38,7 +38,7 @@ export default function ParentReport() {
     let advice = "";
     if (scoreRate >= 90) advice = " 현재의 완벽함에 안주하지 말고 고난도 심화 유형을 통해 상위 1%의 사고력을 다져야 합니다.";
     else if (scoreRate >= 70) advice = " 아는 문제를 틀리지 않는 '실수 제로' 훈련이 병행된다면 충분히 최상위권 진입이 가능합니다.";
-    else advice = " 진도를 서두르기보다 약점 개념을 완벽히 내 것으로 만드는 '후퇴 없는 전진'이 필요한 시기입니다. 저희가 밀착 관리하겠습니다.";
+    else advice = " 진도를 서두르기보다 약점 개념을 완벽히 내 것으로 만드는 '후퇴 없는 전진'이 필요한 시기입니다.";
     return `${studentName} 학생은 ${sText} 다만, ${wText}${advice}`;
   }, [result]);
 
