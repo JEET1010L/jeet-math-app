@@ -2,7 +2,7 @@ import { useRef, useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { ALL_CONCEPT_DATA } from "./utils/report"; // 아까 만든 report.js에서 데이터 가져오기
+import { ALL_CONCEPT_DATA } from "./utils/report"; 
 
 const COLORS = {
   primary: "#E11D48",
@@ -23,39 +23,27 @@ export default function ParentReport() {
   const [isExporting, setIsExporting] = useState(false);
 
   const result = location.state;
-  const isAdmin = result?.isAdmin === true; // 관리자 출입증 확인
+  const isAdmin = result?.isAdmin === true;
 
-  // 🧠 [지능형 멘트 생성 엔진] 
-  // - 이미 저장된 코멘트가 있어도, 리포트를 열 때 실시간으로 더 정교하게 생성합니다.
   const professionalComment = useMemo(() => {
     if (!result) return "";
-    
     const { studentName, scoreRate, gradeCode, strongConcepts = [], weakConcepts = [] } = result;
-    // 학년 코드에 맞는 DB 선택 (기본값 S3)
     const db = ALL_CONCEPT_DATA[gradeCode] || ALL_CONCEPT_DATA["S3"];
-
-    // 1. 강점 분석 (첫 번째 강점 활용)
     const sText = strongConcepts.length > 0 
       ? db.STRENGTH[strongConcepts[0]] || "수학적 기본기가 탄탄하며 성실한 학습 태도를 보여줍니다."
       : "기본 개념을 차근차근 익히며 문제 해결을 위한 집중력을 발휘하고 있습니다.";
-
-    // 2. 약점 및 보완 분석 (최대 2개 조합)
     const wText = weakConcepts.length > 0
       ? weakConcepts.slice(0, 2).map(con => db.WEAKNESS[con] || `${con} 영역의 보완 학습이 필요합니다.`).join(" 또한 ")
       : "현재 특별한 취약점 없이 고른 성취도를 보이고 있는 안정적인 상태입니다.";
-
-    // 3. 전문가 총평 (점수대별)
     let advice = "";
     if (scoreRate >= 90) advice = " 현재의 완벽함에 안주하지 말고 고난도 심화 유형을 통해 상위 1%의 사고력을 다져야 합니다.";
     else if (scoreRate >= 70) advice = " 아는 문제를 틀리지 않는 '실수 제로' 훈련이 병행된다면 충분히 최상위권 진입이 가능합니다.";
     else advice = " 진도를 서두르기보다 약점 개념을 완벽히 내 것으로 만드는 '후퇴 없는 전진'이 필요한 시기입니다. 저희가 밀착 관리하겠습니다.";
-
     return `${studentName} 학생은 ${sText} 다만, ${wText}${advice}`;
   }, [result]);
 
   if (!result) return <div style={{padding: 50, textAlign: 'center'}}>리포트 데이터가 없습니다.</div>;
 
-  // PDF 저장 기능
   const handleExportPdf = async () => {
     if (!reportRef.current) return;
     try {
@@ -87,7 +75,7 @@ export default function ParentReport() {
           </button>
         </div>
 
-        {/* 리포트 본문 (PDF로 찍히는 영역) */}
+        {/* 리포트 본문 (PDF 영역) */}
         <div ref={reportRef} style={styles.reportCard}>
           <div style={styles.headerBand} />
           <div style={styles.logoWrap}>
@@ -108,7 +96,7 @@ export default function ParentReport() {
             <InfoItem label="성취도 레벨" value={`${result.level}등급`} />
           </div>
 
-          {/* 종합 평가 (자동 멘트 출력 핵심 섹션) */}
+          {/* 종합 평가 */}
           <section style={{ marginBottom: 30 }}>
             <h3 style={styles.sectionTitle}>1. 종합 학습 진단</h3>
             <div style={styles.summaryCard}>
@@ -142,12 +130,41 @@ export default function ParentReport() {
 
           <div style={styles.footer}>본 분석 결과는 JEET 수학학원의 전문 진단 시스템에 의해 생성되었습니다.</div>
         </div>
+
+        {/* 🚀 하단 리뷰/정보 섹션 (PDF 제외) */}
+        {!isExporting && (
+          <div style={styles.actionSection}>
+            <div style={{ marginBottom: '24px' }}>
+              <h3 style={styles.actionTitle}>"아이들의 시간이 헛되지 않도록"</h3>
+              <p style={styles.actionDesc}>
+                JEET는 단 한 명의 아이도 소홀히 하지 않기 위해 오늘도 연구합니다.<br/>
+                더 나은 교육 서비스를 제공할 수 있도록,<br/>
+                <strong>소중한 피드백(응원 리뷰)을 남겨주시면 큰 힘이 됩니다.</strong>
+              </p>
+            </div>
+
+            <div style={styles.btnGroup}>
+              <button 
+                onClick={() => window.open(`https://m.place.naver.com/place/21370523/review/visitor`, '_blank')}
+                style={styles.reviewBtn}
+              >
+                네이버 응원 리뷰 남기기 ✍️
+              </button>
+              
+              <button 
+                onClick={() => window.open(`https://m.place.naver.com/place/21370523/home`, '_blank')}
+                style={styles.infoBtn}
+              >
+                JEET 학원 위치 및 정보 📍
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-// 정보 표시 카드 컴포넌트
 function InfoItem({ label, value }) {
   return (
     <div style={styles.infoItem}>
@@ -183,5 +200,13 @@ const styles = {
   noData: { fontSize: 13, color: "#94A3B8", fontStyle: 'italic' },
   footer: { marginTop: 50, textAlign: 'center', fontSize: 13, color: "#94A3B8", borderTop: "1px solid #F1F5F9", paddingTop: 20 },
   primaryButton: { border: "none", background: COLORS.grad, color: "#FFF", borderRadius: 12, padding: "12px 24px", fontWeight: 800, cursor: "pointer", boxShadow: "0 4px 12px rgba(225,29,72,0.3)" },
-  secondaryButton: { border: "1px solid #E2E8F0", background: "#FFF", borderRadius: 12, padding: "12px 24px", fontWeight: 800, cursor: "pointer", color: "#475569" }
+  secondaryButton: { border: "1px solid #E2E8F0", background: "#FFF", borderRadius: 12, padding: "12px 24px", fontWeight: 800, cursor: "pointer", color: "#475569" },
+  
+  // 🚀 추가된 액션 스타일
+  actionSection: { marginTop: '30px', padding: '30px 20px', backgroundColor: '#FFFFFF', borderRadius: '28px', textAlign: 'center', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px rgba(0,0,0,0.05)' },
+  actionTitle: { fontSize: '19px', fontWeight: '900', color: '#1E293B', marginBottom: '10px' },
+  actionDesc: { fontSize: '14px', color: '#64748B', lineHeight: '1.6', wordBreak: 'keep-all' },
+  btnGroup: { display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '400px', margin: '15px auto 0' },
+  reviewBtn: { backgroundColor: '#03C75A', color: '#FFFFFF', padding: '16px', border: 'none', borderRadius: '16px', fontWeight: '800', fontSize: '16px', cursor: 'pointer', boxShadow: '0 4px 12px rgba(3,199,90,0.2)' },
+  infoBtn: { backgroundColor: '#F8FAFC', color: '#475569', padding: '16px', border: '1px solid #E2E8F0', borderRadius: '16px', fontWeight: '700', fontSize: '15px', cursor: 'pointer' }
 };
