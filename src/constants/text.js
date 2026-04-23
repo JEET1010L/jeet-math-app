@@ -5,7 +5,7 @@ export const TEXT = {
   BRAND_NAME: "삼척JEET",
   BRAND_SUBJECT: "수학",
 
-  NAME_PLACEHOLDER: "학생이름 (개인별피드백용)",
+  NAME_PLACEHOLDER: "이름을 입력하세요",
 
   START_BADGE: "진단",
   START_BUTTON: "진단 시작하기",
@@ -30,11 +30,11 @@ export const TEXT = {
   EMPTY_DATA: "문제 데이터가 없습니다.",
 
   ADMIN_TITLE: "삼척JEET수학 진단관리시스템",
-  ADMIN_SUBTITLE: "학생 개념 진단 결과를 기반으로 상담이 가능합니다",
+  ADMIN_SUBTITLE: "학생 개념 진단 결과를 참고해 보강이 필요한 단원을 확인하세요",
   ADMIN_CLEAR_ALL: "전체 기록 삭제",
 
-  REPORT_TITLE: "학년별 필수개념 진단 리포트",
-  REPORT_SUBTITLE: "학생의 현재 수준과 보완이 필요한 개념을 정리한 상담용 보고서입니다.",
+  REPORT_TITLE: "학년별 개념 진단 리포트",
+  REPORT_SUBTITLE: "학생의 현재 수준과 보완이 필요한 개념을 정리한 보고서입니다.",
   REPORT_NO_DATA: "리포트 데이터가 없습니다",
   REPORT_BACK_ADMIN: "관리자 페이지로 돌아가기",
   REPORT_SAVE_PDF: "PDF 저장",
@@ -43,11 +43,11 @@ export const TEXT = {
   SECTION_SUMMARY: "1. 종합 평가",
   SECTION_STRONG: "2. 강점 개념",
   SECTION_WEAK: "3. 보완 필요 개념",
-  SECTION_MEMO: "4. 학부모 상담 메모",
+  SECTION_MEMO: "4. 메모",
 
   NO_STRONG_DATA: "강점 개념 데이터가 아직 충분하지 않습니다.",
   NO_WEAK_DATA: "특별히 낮은 개념 없이 고르게 수행했습니다.",
 
   WEAK_GUIDE: "개념 이해 → 유형 적용 → 반복 학습 순으로 보완하는 것이 효과적입니다.",
-  REPORT_FOOTER: "본 리포트는 삼척JEET수학전문학원 진단 시스템을 바탕으로 자동 생성되었습니다.",
+  REPORT_FOOTER: "본 리포트는 삼척JEET수학전문학원 진단 시스템으로 자동 생성되었습니다.",
 };
